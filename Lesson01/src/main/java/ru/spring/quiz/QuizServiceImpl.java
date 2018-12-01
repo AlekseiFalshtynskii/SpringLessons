@@ -61,8 +61,6 @@ public class QuizServiceImpl implements QuizService {
     }
 
     private void showResult() {
-        if (!this.questions.isEmpty()) {
-            this.printStream.println(this.lastName + " " + this.firstName + ", правильных ответов: " + this.rightAnswers);
-        }
+        this.printStream.println(this.lastName + " " + this.firstName + ", правильных ответов: " + this.rightAnswers);
     }
 }
