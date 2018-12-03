@@ -55,7 +55,7 @@ public class QuizServiceImpl implements QuizService {
     private void checkQuestion(Question question) {
         this.printStream.print(question.getQuestion());
         String answer = this.scanner.nextLine();
-        if (question.getAnswer().equals(answer)) {
+        if (question.getAnswer().equalsIgnoreCase(answer)) {
             this.rightAnswers++;
         }
     }

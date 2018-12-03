@@ -24,7 +24,6 @@ public class CSVReaderImplTest {
     public void readQuestions() throws Exception {
         Resource resource = new ClassPathResource("quiz.csv");
         CSVReader csvReader = new CSVReaderImpl(resource);
-        csvReader.readQuestions();
         assertThat(csvReader.readQuestions(), is(questions));
     }
 }
