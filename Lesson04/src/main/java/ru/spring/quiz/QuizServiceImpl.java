@@ -1,38 +1,33 @@
 package ru.spring.quiz;
 
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
-import ru.spring.csv.CSVReader;
+import ru.spring.service.I18nService;
 
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 
 @Service
 public class QuizServiceImpl implements QuizService {
     private final Scanner scanner;
     private final PrintStream printStream;
-    private final MessageSource messageSource;
-    private final Locale locale;
+    private final I18nService i18nService;
     private List<Question> questions;
     private String lastName;
     private String firstName;
     private int rightAnswers = 0;
 
-    public QuizServiceImpl(Scanner scanner, PrintStream printStream, MessageSource messageSource, CSVReader csvReader) {
+    public QuizServiceImpl(Scanner scanner, PrintStream printStream, I18nService i18nService) {
         this.scanner = scanner;
         this.printStream = printStream;
-        this.messageSource = messageSource;
-        this.locale = LocaleContextHolder.getLocale();
+        this.i18nService = i18nService;
         try {
-            this.questions = csvReader.readQuestions();
+            this.questions = i18nService.getQuestions();
         } catch (IOException e) {
             this.questions = Collections.emptyList();
-            this.printStream.println(this.messageSource.getMessage("quiz.error", null, this.locale));
+            this.printStream.println(this.i18nService.getMessage("quiz.error"));
         }
     }
 
@@ -46,12 +41,12 @@ public class QuizServiceImpl implements QuizService {
     }
 
     private void inputLastName() {
-        this.printStream.print(this.messageSource.getMessage("quiz.enter.last.name", null, this.locale));
+        this.printStream.print(this.i18nService.getMessage("quiz.enter.last.name"));
         this.lastName = this.scanner.nextLine();
     }
 
     private void inputFirstName() {
-        this.printStream.print(this.messageSource.getMessage("quiz.enter.first.name", null, this.locale));
+        this.printStream.print(this.i18nService.getMessage("quiz.enter.first.name"));
         this.firstName = this.scanner.nextLine();
     }
 
@@ -70,8 +65,7 @@ public class QuizServiceImpl implements QuizService {
     }
 
     private void showResult() {
-        this.printStream.println(this.messageSource.getMessage("quiz.result",
-                new Object[]{this.lastName, this.firstName, this.rightAnswers},
-                this.locale));
+        this.printStream.println(this.i18nService.getMessage("quiz.result",
+                new Object[]{this.lastName, this.firstName, this.rightAnswers}));
     }
 }

@@ -6,5 +6,5 @@ import java.io.IOException;
 import java.util.List;
 
 public interface CSVReader {
-    List<Question> readQuestions() throws IOException;
+    List<Question> readQuestions(String path) throws IOException;
 }

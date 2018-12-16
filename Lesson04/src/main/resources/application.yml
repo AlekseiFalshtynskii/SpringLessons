@@ -1,7 +1,5 @@
 quiz:
   questions:
-    ru:
-      csv: csv/quiz_ru_RU.csv
-    en:
-      csv: csv/quiz_en_US.csv
-  locale: ru_RU
+    ru_ru: csv/quiz_ru_RU.csv
+    en_us: csv/quiz_en_US.csv
+  locale: en_US
