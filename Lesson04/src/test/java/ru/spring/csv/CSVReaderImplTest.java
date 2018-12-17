@@ -1,44 +1,22 @@
 package ru.spring.csv;
 
 import org.junit.Test;
-import ru.spring.quiz.Question;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 public class CSVReaderImplTest {
     private static final String CSV_RU = "csv/quiz_ru_RU.csv";
     private static final String CSV_EN = "csv/quiz_en_US.csv";
-    private static final List<Question> QUESTIONS_RU = Arrays.asList(
-            new Question("2 * 2 = ", "4"),
-            new Question("3 * 3 = ", "9"),
-            new Question("4 * 4 = ", "16"),
-            new Question("5 * 5 = ", "25"),
-            new Question("6 * 6 = ", "36")
-    );
-    private static final List<Question> QUESTIONS_EN = Arrays.asList(
-            new Question("2 x 2 = ", "4"),
-            new Question("3 x 3 = ", "9"),
-            new Question("4 x 4 = ", "16"),
-            new Question("5 x 5 = ", "25"),
-            new Question("6 x 6 = ", "36")
-    );
+
+    private CSVReader csvReader = new CSVReaderImpl();
 
     @Test
-    public void readQuestionsRU() throws Exception {
-        this.readQuestions(CSV_RU, QUESTIONS_RU);
+    public void readQuestions() throws Exception {
+        this.readQuestions(CSV_RU);
+        this.readQuestions(CSV_EN);
     }
 
-    @Test
-    public void readQuestionsEN() throws Exception {
-        this.readQuestions(CSV_EN, QUESTIONS_EN);
-    }
-
-    private void readQuestions(String csv, List<Question> questions) throws IOException {
-        assertThat(new CSVReaderImpl().readQuestions(csv), is(questions));
+    private void readQuestions(String csv) throws IOException {
+        this.csvReader.readQuestions(csv);
     }
 }

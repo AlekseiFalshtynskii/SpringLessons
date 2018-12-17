@@ -1,5 +1,3 @@
 quiz:
-  questions:
-    ru_ru: csv/quiz_ru_RU.csv
-    en_us: csv/quiz_en_US.csv
+  file-name-pattern: csv/quiz_%s.csv
   locale: en_US

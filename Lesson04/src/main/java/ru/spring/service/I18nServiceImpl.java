@@ -1,43 +1,39 @@
 package ru.spring.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.core.env.Environment;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-import ru.spring.csv.CSVReader;
-import ru.spring.quiz.Question;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.Locale;
-
-import static java.lang.String.format;
 
 @Service
 public class I18nServiceImpl implements I18nService {
-    private final Environment env;
+    private Locale locale;
     private final MessageSource messageSource;
-    private final CSVReader csvReader;
+    private String quizFileNamePattern;
 
-    public I18nServiceImpl(Environment environment, MessageSource messageSource, CSVReader csvReader) {
-        this.env = environment;
+    public I18nServiceImpl(@Value("${quiz.locale}") String quizLocale,
+                           @Value("${quiz.file-name-pattern}") String quizFileNamePattern,
+                           MessageSource messageSource) {
         this.messageSource = messageSource;
-        this.csvReader = csvReader;
-        this.setLocale(this.env.getProperty("quiz.locale"));
-    }
-
-    public void setLocale(String locale) {
-        LocaleContextHolder.setDefaultLocale(new Locale(locale));
-    }
-
-    public Locale getLocale() {
-        return LocaleContextHolder.getLocale();
+        this.setLocale(quizLocale);
+        this.quizFileNamePattern = quizFileNamePattern;
     }
 
     @Override
-    public List<Question> getQuestions() throws IOException {
-        return this.csvReader.readQuestions(this.env.getProperty(format("quiz.questions.%s", this.getLocale().getLanguage())));
+    public void setLocale(String quizLocale) {
+        this.locale = new Locale(quizLocale);
+    }
+
+    @Override
+    public Locale getLocale() {
+        return this.locale;
+    }
+
+    @Override
+    public String getQuestionsCsvFileName() {
+        return String.format(this.quizFileNamePattern, this.locale.toString());
     }
 
     @Override

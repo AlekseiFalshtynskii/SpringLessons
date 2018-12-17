@@ -1,6 +1,7 @@
 package ru.spring.quiz;
 
 import org.springframework.stereotype.Service;
+import ru.spring.csv.CSVReader;
 import ru.spring.service.I18nService;
 
 import java.io.IOException;
@@ -19,12 +20,12 @@ public class QuizServiceImpl implements QuizService {
     private String firstName;
     private int rightAnswers = 0;
 
-    public QuizServiceImpl(Scanner scanner, PrintStream printStream, I18nService i18nService) {
+    public QuizServiceImpl(Scanner scanner, PrintStream printStream, I18nService i18nService, CSVReader csvReader) {
         this.scanner = scanner;
         this.printStream = printStream;
         this.i18nService = i18nService;
         try {
-            this.questions = i18nService.getQuestions();
+            this.questions = csvReader.readQuestions(i18nService.getQuestionsCsvFileName());
         } catch (IOException e) {
             this.questions = Collections.emptyList();
             this.printStream.println(this.i18nService.getMessage("quiz.error"));
