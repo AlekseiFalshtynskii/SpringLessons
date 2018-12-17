@@ -1,0 +1,3 @@
+quiz:
+  file-name-pattern: csv/quiz_%s.csv
+  locale: en_US
