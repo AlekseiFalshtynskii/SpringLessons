@@ -45,7 +45,6 @@ public class QuizServiceImplTest {
     private I18nService i18nServiceMock;
     @MockBean
     private CSVReader csvReaderMock;
-    private QuizService quizService;
 
     @Rule
     public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();
