@@ -1,8 +1,11 @@
 package ru.spring.csv;
 
 import org.junit.Test;
+import ru.spring.quiz.Question;
 
-import java.io.IOException;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class CSVReaderImplTest {
     private static final String CSV_RU = "csv/quiz_ru_RU.csv";
@@ -12,11 +15,14 @@ public class CSVReaderImplTest {
 
     @Test
     public void readQuestions() throws Exception {
-        this.readQuestions(CSV_RU);
-        this.readQuestions(CSV_EN);
-    }
+        List<Question> questions = this.csvReader.readQuestions(CSV_RU);
+        assertEquals(1, questions.size());
+        assertEquals("Как дела?", questions.get(0).getQuestion());
+        assertEquals("Нормально. Спасибо", questions.get(0).getAnswer());
 
-    private void readQuestions(String csv) throws IOException {
-        this.csvReader.readQuestions(csv);
+        questions = this.csvReader.readQuestions(CSV_EN);
+        assertEquals(1, questions.size());
+        assertEquals("How are you?", questions.get(0).getQuestion());
+        assertEquals("I'm fine. Thank you", questions.get(0).getAnswer());
     }
 }
