@@ -5,12 +5,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.contrib.java.lang.system.TextFromStandardInputStream;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
 import ru.spring.csv.CSVReader;
+import ru.spring.csv.CSVReaderImpl;
 import ru.spring.service.I18nService;
+import ru.spring.service.I18nServiceImpl;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -19,10 +17,9 @@ import java.util.Scanner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.contrib.java.lang.system.TextFromStandardInputStream.emptyStandardInputStream;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
 public class QuizServiceImplTest {
     private static final String CSV = "csv";
     private static final String LAST_NAME = "Ivanov";
@@ -41,10 +38,8 @@ public class QuizServiceImplTest {
     private static final int RIGHT_ANSWERS_OK = 5;
     private static final int RIGHT_ANSWERS_ERROR = 0;
 
-    @MockBean
-    private I18nService i18nServiceMock;
-    @MockBean
-    private CSVReader csvReaderMock;
+    private I18nService i18nServiceMock = mock(I18nServiceImpl.class);
+    private CSVReader csvReaderMock = mock(CSVReaderImpl.class);
 
     @Rule
     public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();
