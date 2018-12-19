@@ -16,9 +16,19 @@ public class QuizCommands {
         this.i18nService = i18nService;
     }
 
-    @ShellMethod(key = "start", value = "Start quiz")
-    public void holdQuiz(@ShellOption(defaultValue = "ru_RU") String locale) {
+    @ShellMethod("Login")
+    public void login() {
+        this.quizService.login();
+    }
+
+    @ShellMethod("Start quiz")
+    public void startQuiz(@ShellOption(defaultValue = "ru_RU") String locale) {
         this.i18nService.setLocale(locale);
         this.quizService.holdQuiz();
+    }
+
+    @ShellMethod("Show result")
+    public void showResult() {
+        this.quizService.showResult();
     }
 }

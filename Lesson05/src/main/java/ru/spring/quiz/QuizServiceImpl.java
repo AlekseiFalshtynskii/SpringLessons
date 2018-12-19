@@ -6,7 +6,6 @@ import ru.spring.service.I18nService;
 import ru.spring.service.InputOutputService;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -14,7 +13,6 @@ public class QuizServiceImpl implements QuizService {
     private final InputOutputService inputOutputService;
     private final I18nService i18nService;
     private final CSVReader csvReader;
-    private List<Question> questions;
     private String lastName;
     private String firstName;
     private int rightAnswers = 0;
@@ -25,17 +23,17 @@ public class QuizServiceImpl implements QuizService {
         this.csvReader = csvReader;
     }
 
+    @Override
+    public void login() {
+        this.inputLastName();
+        this.inputFirstName();
+    }
+
+    @Override
     public void holdQuiz() {
         try {
-            this.questions = this.csvReader.readQuestions(this.i18nService.getQuestionsCsvFileName());
-            if (!this.questions.isEmpty()) {
-                this.inputLastName();
-                this.inputFirstName();
-                this.askQuestions();
-                this.showResult();
-            }
+            this.askQuestions(this.csvReader.readQuestions(this.i18nService.getQuestionsCsvFileName()));
         } catch (IOException e) {
-            this.questions = Collections.emptyList();
             this.inputOutputService.println(this.i18nService.getMessage("quiz.error"));
         }
     }
@@ -50,8 +48,8 @@ public class QuizServiceImpl implements QuizService {
         this.firstName = this.inputOutputService.nextLine();
     }
 
-    private void askQuestions() {
-        for (Question question : this.questions) {
+    private void askQuestions(List<Question> questions) {
+        for (Question question : questions) {
             this.checkQuestion(question);
         }
     }
@@ -64,7 +62,8 @@ public class QuizServiceImpl implements QuizService {
         }
     }
 
-    private void showResult() {
+    @Override
+    public void showResult() {
         this.inputOutputService.println(this.i18nService.getMessage("quiz.result",
                 new Object[]{this.lastName, this.firstName, this.rightAnswers}));
     }

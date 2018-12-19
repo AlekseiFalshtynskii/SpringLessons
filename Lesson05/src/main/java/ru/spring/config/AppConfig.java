@@ -4,21 +4,15 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
-
-import java.io.InputStream;
-import java.io.PrintStream;
+import ru.spring.service.InputOutputService;
+import ru.spring.service.InputOutputServiceImpl;
 
 @Configuration
 public class AppConfig {
 
     @Bean
-    public InputStream inputStream() {
-        return System.in;
-    }
-
-    @Bean
-    public PrintStream printStream() {
-        return System.out;
+    public InputOutputService inputOutputService() {
+        return new InputOutputServiceImpl(System.in, System.out);
     }
 
     @Bean
