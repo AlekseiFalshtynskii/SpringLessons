@@ -17,13 +17,13 @@ public class QuizCommands {
     }
 
     @ShellMethod("Login")
-    public void login() {
+    public void login(@ShellOption(defaultValue = "ru_RU") String locale) {
+        this.i18nService.setLocale(locale);
         this.quizService.login();
     }
 
     @ShellMethod("Start quiz")
-    public void startQuiz(@ShellOption(defaultValue = "ru_RU") String locale) {
-        this.i18nService.setLocale(locale);
+    public void startQuiz() {
         this.quizService.holdQuiz();
     }
 
