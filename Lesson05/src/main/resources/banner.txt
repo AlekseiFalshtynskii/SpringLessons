@@ -1,0 +1,8 @@
+
+${AnsiColor.BLUE} $$$$  $$  $$ $$$$$$ $$$$$$
+${AnsiColor.BLUE}$$  $$ $$  $$   $$      $$
+${AnsiColor.BLUE}$$ $$$ $$  $$   $$     $$
+${AnsiColor.BLUE}$$  $$ $$  $$   $$    $$
+${AnsiColor.BLUE} $$$$$  $$$$  $$$$$$ $$$$$$
+
+${AnsiColor.BLUE} :: Spring Boot ::        ${spring-boot.formatted-version}
