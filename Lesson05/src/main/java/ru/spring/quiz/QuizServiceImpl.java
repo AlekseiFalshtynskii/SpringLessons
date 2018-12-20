@@ -8,6 +8,8 @@ import ru.spring.service.InputOutputService;
 import java.io.IOException;
 import java.util.List;
 
+import static org.apache.logging.log4j.util.Strings.isEmpty;
+
 @Service
 public class QuizServiceImpl implements QuizService {
     private final InputOutputService inputOutputService;
@@ -15,6 +17,7 @@ public class QuizServiceImpl implements QuizService {
     private final CSVReader csvReader;
     private String lastName;
     private String firstName;
+    private boolean complete;
     private int rightAnswers = 0;
 
     public QuizServiceImpl(InputOutputService inputOutputService, I18nService i18nService, CSVReader csvReader) {
@@ -25,27 +28,37 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public void login() {
+        this.complete = false;
         this.inputLastName();
         this.inputFirstName();
     }
 
     @Override
     public void holdQuiz() {
-        try {
-            this.askQuestions(this.csvReader.readQuestions(this.i18nService.getQuestionsCsvFileName()));
-        } catch (IOException e) {
-            this.inputOutputService.println(this.i18nService.getMessage("quiz.error"));
+        if (isEmpty(this.lastName) || isEmpty(this.firstName)) {
+            this.inputOutputService.println(this.i18nService.getMessage("quiz.need.login"));
+        } else {
+            try {
+                this.askQuestions(this.csvReader.readQuestions(this.i18nService.getQuestionsCsvFileName()));
+                this.complete = true;
+            } catch (IOException e) {
+                this.inputOutputService.println(this.i18nService.getMessage("quiz.error"));
+            }
         }
     }
 
     private void inputLastName() {
-        this.inputOutputService.print(this.i18nService.getMessage("quiz.enter.last.name"));
-        this.lastName = this.inputOutputService.nextLine();
+        do {
+            this.inputOutputService.print(this.i18nService.getMessage("quiz.enter.last.name"));
+            this.lastName = this.inputOutputService.nextLine();
+        } while (isEmpty(this.lastName));
     }
 
     private void inputFirstName() {
-        this.inputOutputService.print(this.i18nService.getMessage("quiz.enter.first.name"));
-        this.firstName = this.inputOutputService.nextLine();
+        do {
+            this.inputOutputService.print(this.i18nService.getMessage("quiz.enter.first.name"));
+            this.firstName = this.inputOutputService.nextLine();
+        } while (isEmpty(this.firstName));
     }
 
     private void askQuestions(List<Question> questions) {
@@ -55,8 +68,11 @@ public class QuizServiceImpl implements QuizService {
     }
 
     private void checkQuestion(Question question) {
-        this.inputOutputService.print(question.getQuestion());
-        String answer = this.inputOutputService.nextLine();
+        String answer;
+        do {
+            this.inputOutputService.print(question.getQuestion());
+            answer = this.inputOutputService.nextLine();
+        } while (isEmpty(answer));
         if (question.getAnswer().equalsIgnoreCase(answer)) {
             this.rightAnswers++;
         }
@@ -64,7 +80,13 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public void showResult() {
-        this.inputOutputService.println(this.i18nService.getMessage("quiz.result",
-                new Object[]{this.lastName, this.firstName, this.rightAnswers}));
+        if (this.complete) {
+            this.inputOutputService.println(this.i18nService.getMessage("quiz.result",
+                    new Object[]{this.lastName, this.firstName, this.rightAnswers}));
+        } else if (isEmpty(this.lastName) || isEmpty(this.firstName)) {
+            this.inputOutputService.println(this.i18nService.getMessage("quiz.need.login"));
+        } else {
+            this.inputOutputService.println(this.i18nService.getMessage("quiz.need.complete"));
+        }
     }
 }
