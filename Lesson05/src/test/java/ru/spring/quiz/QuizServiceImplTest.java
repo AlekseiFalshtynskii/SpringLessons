@@ -11,6 +11,8 @@ import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.spring.csv.CSVReader;
+import ru.spring.exception.CompletionAccessException;
+import ru.spring.exception.UnauthorizedAccessException;
 import ru.spring.service.I18nService;
 import ru.spring.service.InputOutputService;
 
@@ -67,13 +69,9 @@ public class QuizServiceImplTest {
         verify(this.i18nServiceMock, times(1)).getMessage("quiz.enter.first.name");
     }
 
-    @Test
+    @Test(expected = UnauthorizedAccessException.class)
     public void holdQuizWithoutLogin() throws Exception {
-        String expected = "quiz.need.login";
-        when(this.i18nServiceMock.getMessage("quiz.need.login")).thenReturn(expected);
         this.quizService.holdQuiz();
-        verify(this.i18nServiceMock, times(1)).getMessage("quiz.need.login");
-        verify(this.inputOutputService, times(1)).println(expected);
     }
 
     @Test
@@ -96,27 +94,19 @@ public class QuizServiceImplTest {
         verify(this.inputOutputService, times(1)).println(ERROR_CSV);
     }
 
-    @Test
-    public void showResultWithoutLogin() {
-        String expected = "quiz.need.login";
-        when(this.i18nServiceMock.getMessage("quiz.need.login")).thenReturn(expected);
+    @Test(expected = UnauthorizedAccessException.class)
+    public void showResultWithoutLogin() throws Exception {
         this.quizService.showResult();
-        verify(this.i18nServiceMock, times(1)).getMessage("quiz.need.login");
-        verify(this.inputOutputService, times(1)).println(expected);
     }
 
-    @Test
-    public void showResultWithoutHoldQuiz() {
-        String expected = "quiz.need.complete";
-        when(this.i18nServiceMock.getMessage("quiz.need.complete")).thenReturn(expected);
+    @Test(expected = CompletionAccessException.class)
+    public void showResultWithoutHoldQuiz() throws Exception {
         this.quizService.login();
         this.quizService.showResult();
-        verify(this.i18nServiceMock, times(1)).getMessage("quiz.need.complete");
-        verify(this.inputOutputService, times(1)).println(expected);
     }
 
     @Test
-    public void showResult() {
+    public void showResult() throws Exception {
         this.quizService.login();
         this.quizService.holdQuiz();
         this.quizService.showResult();

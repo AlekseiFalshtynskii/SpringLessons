@@ -2,6 +2,8 @@ package ru.spring.quiz;
 
 import org.springframework.stereotype.Service;
 import ru.spring.csv.CSVReader;
+import ru.spring.exception.CompletionAccessException;
+import ru.spring.exception.UnauthorizedAccessException;
 import ru.spring.service.I18nService;
 import ru.spring.service.InputOutputService;
 
@@ -34,16 +36,15 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public void holdQuiz() {
+    public void holdQuiz() throws UnauthorizedAccessException {
         if (isEmpty(this.lastName) || isEmpty(this.firstName)) {
-            this.inputOutputService.println(this.i18nService.getMessage("quiz.need.login"));
-        } else {
-            try {
-                this.askQuestions(this.csvReader.readQuestions(this.i18nService.getQuestionsCsvFileName()));
-                this.complete = true;
-            } catch (IOException e) {
-                this.inputOutputService.println(this.i18nService.getMessage("quiz.error"));
-            }
+            throw new UnauthorizedAccessException();
+        }
+        try {
+            this.askQuestions(this.csvReader.readQuestions(this.i18nService.getQuestionsCsvFileName()));
+            this.complete = true;
+        } catch (IOException e) {
+            this.inputOutputService.println(this.i18nService.getMessage("quiz.error"));
         }
     }
 
@@ -79,14 +80,14 @@ public class QuizServiceImpl implements QuizService {
     }
 
     @Override
-    public void showResult() {
-        if (this.complete) {
-            this.inputOutputService.println(this.i18nService.getMessage("quiz.result",
-                    new Object[]{this.lastName, this.firstName, this.rightAnswers}));
-        } else if (isEmpty(this.lastName) || isEmpty(this.firstName)) {
-            this.inputOutputService.println(this.i18nService.getMessage("quiz.need.login"));
-        } else {
-            this.inputOutputService.println(this.i18nService.getMessage("quiz.need.complete"));
+    public void showResult() throws UnauthorizedAccessException, CompletionAccessException {
+        if (isEmpty(this.lastName) || isEmpty(this.firstName)) {
+            throw new UnauthorizedAccessException();
         }
+        if (!this.complete) {
+            throw new CompletionAccessException();
+        }
+        this.inputOutputService.println(this.i18nService.getMessage("quiz.result",
+                new Object[]{this.lastName, this.firstName, this.rightAnswers}));
     }
 }
