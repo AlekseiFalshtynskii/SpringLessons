@@ -5,15 +5,15 @@ import ru.spring.model.Author;
 import java.util.List;
 
 public interface AuthorService {
-    Integer save(Author author);
+    Long save(Author author);
 
-    Author findById(Integer id);
+    Author findById(Long id);
 
     List<Author> findAll();
 
     long count();
 
-    void deleteById(Integer id);
+    void deleteById(Long id);
 
     void deleteAll();
 }

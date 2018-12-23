@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.spring.dao.AuthorDao;
 import ru.spring.model.Author;
 
 import java.util.List;
@@ -20,12 +21,12 @@ import static org.junit.Assert.assertEquals;
 })
 public class AuthorJdbcDaoTest {
     @Autowired
-    private AuthorJdbcDao dao;
+    private AuthorDao dao;
 
     @Test
     public void crud() throws Exception {
         Author expected = new Author("Фамилия", "Имя");
-        Integer id = dao.insert(expected);
+        Long id = dao.insert(expected);
 
         Author author = dao.findById(id);
         assertEquals(id, author.getId());

@@ -17,7 +17,7 @@ import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
 
 @Repository
-public class GenreJdbcDao implements GenreDao<Genre, Integer> {
+public class GenreJdbcDao implements GenreDao {
     private final NamedParameterJdbcOperations jdbc;
     private final GenreMapper mapper;
 
@@ -27,17 +27,17 @@ public class GenreJdbcDao implements GenreDao<Genre, Integer> {
     }
 
     @Override
-    public Integer insert(Genre genre) {
+    public Long insert(Genre genre) {
         String query = "INSERT INTO genre (name) VALUES (:name)";
         MapSqlParameterSource source = new MapSqlParameterSource();
         source.addValue("name", genre.getName());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbc.update(query, source, keyHolder, new String[]{"id"});
-        return keyHolder.getKey().intValue();
+        return keyHolder.getKey().longValue();
     }
 
     @Override
-    public Integer update(Genre genre) {
+    public Long update(Genre genre) {
         String query = "UPDATE genre SET name = :name WHERE id = :id";
         Map<String, Object> params = new HashMap<>(2);
         params.put("id", genre.getId());
@@ -47,9 +47,9 @@ public class GenreJdbcDao implements GenreDao<Genre, Integer> {
     }
 
     @Override
-    public Genre findById(Integer id) {
+    public Genre findById(Long id) {
         String query = "SELECT * FROM genre WHERE id = :id";
-        Map<String, Integer> params = singletonMap("id", id);
+        Map<String, Long> params = singletonMap("id", id);
         return this.jdbc.queryForObject(query, params, this.mapper);
     }
 
@@ -66,9 +66,9 @@ public class GenreJdbcDao implements GenreDao<Genre, Integer> {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         String query = "DELETE FROM genre WHERE id = :id";
-        Map<String, Integer> params = singletonMap("id", id);
+        Map<String, Long> params = singletonMap("id", id);
         this.jdbc.update(query, params);
     }
 
@@ -76,14 +76,5 @@ public class GenreJdbcDao implements GenreDao<Genre, Integer> {
     public void deleteAll() {
         String query = "DELETE FROM genre";
         this.jdbc.update(query, emptyMap());
-    }
-
-    @Override
-    public List<Genre> findByBookId(Integer bookId) {
-        String query = "SELECT * FROM genre " +
-                "JOIN book_genre on book_genre.genre_id = genre.id " +
-                "WHERE book_genre.book_id = :bookId";
-        Map<String, Integer> params = singletonMap("bookId", bookId);
-        return this.jdbc.query(query, params, this.mapper);
     }
 }

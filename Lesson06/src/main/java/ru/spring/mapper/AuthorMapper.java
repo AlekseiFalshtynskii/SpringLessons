@@ -14,6 +14,6 @@ public class AuthorMapper implements RowMapper<Author> {
     @Nullable
     @Override
     public Author mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return new Author(rs.getInt("id"), rs.getString("lastname"), rs.getString("firstname"));
+        return new Author(rs.getLong("id"), rs.getString("lastname"), rs.getString("firstname"));
     }
 }

@@ -21,7 +21,7 @@ public class BookCommands {
     }
 
     @ShellMethod("Find book by id")
-    public String findByIdBook(@ShellOption Integer id) {
+    public String findByIdBook(@ShellOption Long id) {
         Book book = bookService.findById(id);
         return book == null ? "Book not found by id = " + id : "Finded " + book.toString();
     }
@@ -37,7 +37,7 @@ public class BookCommands {
     }
 
     @ShellMethod("Delete book by id")
-    public String deleteByIdBook(Integer id) {
+    public String deleteByIdBook(Long id) {
         bookService.deleteById(id);
         return "Deleted book by id = " + id;
     }

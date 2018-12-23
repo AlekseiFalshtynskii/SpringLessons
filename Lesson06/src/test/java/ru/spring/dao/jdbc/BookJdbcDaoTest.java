@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.spring.dao.BookDao;
 import ru.spring.model.Author;
 import ru.spring.model.Book;
 import ru.spring.model.Genre;
@@ -23,7 +24,7 @@ import static org.junit.Assert.assertEquals;
 })
 public class BookJdbcDaoTest {
     @Autowired
-    private BookJdbcDao dao;
+    private BookDao dao;
 
     @Test
     public void crud() throws Exception {
@@ -36,7 +37,7 @@ public class BookJdbcDaoTest {
                 new Genre("Фэнтези")
         );
         Book expected = new Book("Название", "Описание", authors, genres);
-        Integer id = dao.insert(expected);
+        Long id = dao.insert(expected);
 
         Book book = dao.findById(id);
         assertEquals(id, book.getId());

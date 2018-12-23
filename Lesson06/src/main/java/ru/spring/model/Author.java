@@ -1,11 +1,11 @@
 package ru.spring.model;
 
 public class Author {
-    private Integer id;
+    private Long id;
     private String lastName;
     private String firstName;
 
-    public Author(Integer id, String lastName, String firstName) {
+    public Author(Long id, String lastName, String firstName) {
         this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -15,7 +15,7 @@ public class Author {
         this(null, lastName, firstName);
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -52,7 +52,7 @@ public class Author {
     @Override
     public int hashCode() {
         return (getId() == null ? 0 : getId().hashCode())
-                + (getLastName() == null ? 0 : this.getLastName().hashCode())
-                + (getFirstName() == null ? 0 : this.getFirstName().hashCode());
+                + (getLastName() == null ? 0 : getLastName().hashCode())
+                + (getFirstName() == null ? 0 : getFirstName().hashCode());
     }
 }

@@ -5,15 +5,15 @@ import ru.spring.model.Book;
 import java.util.List;
 
 public interface BookService {
-    Integer save(Book book);
+    Long save(Book book);
 
-    Book findById(Integer id);
+    Book findById(Long id);
 
     List<Book> findAll();
 
     long count();
 
-    void deleteById(Integer id);
+    void deleteById(Long id);
 
     void deleteAll();
 }

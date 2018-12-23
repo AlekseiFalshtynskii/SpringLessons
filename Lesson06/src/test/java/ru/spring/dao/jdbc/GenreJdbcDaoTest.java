@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.spring.dao.GenreDao;
 import ru.spring.model.Genre;
 
 import java.util.List;
@@ -20,12 +21,12 @@ import static org.junit.Assert.assertEquals;
 })
 public class GenreJdbcDaoTest {
     @Autowired
-    private GenreJdbcDao dao;
+    private GenreDao dao;
 
     @Test
     public void crud() throws Exception {
         Genre expected = new Genre("Фантастика");
-        Integer id = dao.insert(expected);
+        Long id = dao.insert(expected);
 
         Genre genre = dao.findById(id);
         assertEquals(id, genre.getId());

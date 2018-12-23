@@ -8,7 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.spring.dao.jdbc.BookJdbcDao;
+import ru.spring.dao.BookDao;
 import ru.spring.model.Book;
 
 import java.util.List;
@@ -24,22 +24,22 @@ import static org.mockito.Mockito.*;
 })
 public class BookServiceImplTest {
     @MockBean
-    private BookJdbcDao daoMock;
+    private BookDao daoMock;
     @Autowired
     private BookService bookService;
 
     @Test
     public void saveTest() throws Exception {
         Book expected = new Book("", "", emptyList(), emptyList());
-        when(daoMock.insert(expected)).thenReturn(1);
-        when(daoMock.update(expected)).thenReturn(1);
-        Integer id = bookService.save(expected);
+        when(daoMock.insert(expected)).thenReturn(1L);
+        when(daoMock.update(expected)).thenReturn(1L);
+        Long id = bookService.save(expected);
         assertEquals(1, id.intValue());
         verify(daoMock, times(1)).insert(expected);
 
-        expected = new Book(2, "", "", emptyList(), emptyList());
-        when(daoMock.insert(expected)).thenReturn(2);
-        when(daoMock.update(expected)).thenReturn(2);
+        expected = new Book(2L, "", "", emptyList(), emptyList());
+        when(daoMock.insert(expected)).thenReturn(2L);
+        when(daoMock.update(expected)).thenReturn(2L);
         id = bookService.save(expected);
         assertEquals(2, id.intValue());
         verify(daoMock, times(1)).update(expected);
@@ -47,11 +47,11 @@ public class BookServiceImplTest {
 
     @Test
     public void findByIdTest() throws Exception {
-        Book expected = new Book(1, "", "", emptyList(), emptyList());
-        when(daoMock.findById(1)).thenReturn(expected);
-        Book book = bookService.findById(1);
+        Book expected = new Book(1L, "", "", emptyList(), emptyList());
+        when(daoMock.findById(1L)).thenReturn(expected);
+        Book book = bookService.findById(1L);
         assertEquals(expected, book);
-        verify(daoMock, times(1)).findById(1);
+        verify(daoMock, times(1)).findById(1L);
     }
 
     @Test
@@ -74,8 +74,8 @@ public class BookServiceImplTest {
 
     @Test
     public void deleteByIdTest() throws Exception {
-        bookService.deleteById(1);
-        verify(daoMock, times(1)).deleteById(1);
+        bookService.deleteById(1L);
+        verify(daoMock, times(1)).deleteById(1L);
     }
 
     @Test

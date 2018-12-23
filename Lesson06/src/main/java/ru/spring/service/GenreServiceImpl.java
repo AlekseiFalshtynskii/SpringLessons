@@ -1,21 +1,21 @@
 package ru.spring.service;
 
 import org.springframework.stereotype.Service;
-import ru.spring.dao.jdbc.GenreJdbcDao;
+import ru.spring.dao.GenreDao;
 import ru.spring.model.Genre;
 
 import java.util.List;
 
 @Service
 public class GenreServiceImpl implements GenreService {
-    private final GenreJdbcDao dao;
+    private final GenreDao dao;
 
-    public GenreServiceImpl(GenreJdbcDao dao) {
+    public GenreServiceImpl(GenreDao dao) {
         this.dao = dao;
     }
 
     @Override
-    public Integer save(Genre genre) {
+    public Long save(Genre genre) {
         if (genre.getId() == null) {
             return dao.insert(genre);
         } else {
@@ -24,7 +24,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Genre findById(Integer id) {
+    public Genre findById(Long id) {
         return dao.findById(id);
     }
 
@@ -39,7 +39,7 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         dao.deleteById(id);
     }
 

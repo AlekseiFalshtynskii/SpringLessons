@@ -21,7 +21,7 @@ public class AuthorCommands {
     }
 
     @ShellMethod("Find author by id")
-    public String findByIdAuthor(@ShellOption Integer id) {
+    public String findByIdAuthor(@ShellOption Long id) {
         Author author = authorService.findById(id);
         return author == null ? "Author not found by id = " + id : "Finded " + author.toString();
     }
@@ -37,7 +37,7 @@ public class AuthorCommands {
     }
 
     @ShellMethod("Delete author by id")
-    public String deleteByIdAuthor(Integer id) {
+    public String deleteByIdAuthor(Long id) {
         authorService.deleteById(id);
         return "Deleted author by id = " + id;
     }

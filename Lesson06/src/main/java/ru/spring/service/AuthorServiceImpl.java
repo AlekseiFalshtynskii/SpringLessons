@@ -1,21 +1,21 @@
 package ru.spring.service;
 
 import org.springframework.stereotype.Service;
-import ru.spring.dao.jdbc.AuthorJdbcDao;
+import ru.spring.dao.AuthorDao;
 import ru.spring.model.Author;
 
 import java.util.List;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
-    private final AuthorJdbcDao dao;
+    private final AuthorDao dao;
 
-    public AuthorServiceImpl(AuthorJdbcDao dao) {
+    public AuthorServiceImpl(AuthorDao dao) {
         this.dao = dao;
     }
 
     @Override
-    public Integer save(Author author) {
+    public Long save(Author author) {
         if (author.getId() == null) {
             return dao.insert(author);
         } else {
@@ -24,7 +24,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author findById(Integer id) {
+    public Author findById(Long id) {
         return dao.findById(id);
     }
 
@@ -39,7 +39,7 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         dao.deleteById(id);
     }
 

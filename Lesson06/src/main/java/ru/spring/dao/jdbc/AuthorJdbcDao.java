@@ -17,7 +17,7 @@ import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
 
 @Repository
-public class AuthorJdbcDao implements AuthorDao<Author, Integer> {
+public class AuthorJdbcDao implements AuthorDao {
     private final NamedParameterJdbcOperations jdbc;
     private final AuthorMapper mapper;
 
@@ -27,18 +27,18 @@ public class AuthorJdbcDao implements AuthorDao<Author, Integer> {
     }
 
     @Override
-    public Integer insert(Author author) {
+    public Long insert(Author author) {
         String query = "INSERT INTO author (lastname, firstname) VALUES (:lastName, :firstName)";
         MapSqlParameterSource source = new MapSqlParameterSource();
         source.addValue("lastName", author.getLastName());
         source.addValue("firstName", author.getFirstName());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbc.update(query, source, keyHolder, new String[]{"id"});
-        return keyHolder.getKey().intValue();
+        return keyHolder.getKey().longValue();
     }
 
     @Override
-    public Integer update(Author author) {
+    public Long update(Author author) {
         String query = "UPDATE author SET lastname = :lastName, firstname = :firstName WHERE id = :id";
         Map<String, Object> params = new HashMap<>(3);
         params.put("id", author.getId());
@@ -49,9 +49,9 @@ public class AuthorJdbcDao implements AuthorDao<Author, Integer> {
     }
 
     @Override
-    public Author findById(Integer id) {
+    public Author findById(Long id) {
         String query = "SELECT * FROM author WHERE id = :id";
-        Map<String, Integer> params = singletonMap("id", id);
+        Map<String, Long> params = singletonMap("id", id);
         return this.jdbc.queryForObject(query, params, this.mapper);
     }
 
@@ -68,9 +68,9 @@ public class AuthorJdbcDao implements AuthorDao<Author, Integer> {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         String query = "DELETE FROM author WHERE id = :id";
-        Map<String, Integer> params = singletonMap("id", id);
+        Map<String, Long> params = singletonMap("id", id);
         this.jdbc.update(query, params);
     }
 
@@ -78,14 +78,5 @@ public class AuthorJdbcDao implements AuthorDao<Author, Integer> {
     public void deleteAll() {
         String query = "DELETE FROM author";
         this.jdbc.update(query, emptyMap());
-    }
-
-    @Override
-    public List<Author> findByBookId(Integer bookId) {
-        String query = "SELECT * FROM author " +
-                "JOIN book_author on book_author.author_id = author.id " +
-                "WHERE book_author.book_id = :bookId";
-        Map<String, Integer> params = singletonMap("bookId", bookId);
-        return this.jdbc.query(query, params, this.mapper);
     }
 }

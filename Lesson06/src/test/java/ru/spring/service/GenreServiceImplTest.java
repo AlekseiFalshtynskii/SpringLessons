@@ -8,7 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.spring.dao.jdbc.GenreJdbcDao;
+import ru.spring.dao.GenreDao;
 import ru.spring.model.Genre;
 
 import java.util.List;
@@ -24,22 +24,22 @@ import static org.mockito.Mockito.*;
 })
 public class GenreServiceImplTest {
     @MockBean
-    private GenreJdbcDao daoMock;
+    private GenreDao daoMock;
     @Autowired
     private GenreService genreService;
 
     @Test
     public void saveTest() throws Exception {
         Genre expected = new Genre("");
-        when(daoMock.insert(expected)).thenReturn(1);
-        when(daoMock.update(expected)).thenReturn(1);
-        Integer id = genreService.save(expected);
+        when(daoMock.insert(expected)).thenReturn(1L);
+        when(daoMock.update(expected)).thenReturn(1L);
+        Long id = genreService.save(expected);
         assertEquals(1, id.intValue());
         verify(daoMock, times(1)).insert(expected);
 
-        expected = new Genre(2, "");
-        when(daoMock.insert(expected)).thenReturn(2);
-        when(daoMock.update(expected)).thenReturn(2);
+        expected = new Genre(2L, "");
+        when(daoMock.insert(expected)).thenReturn(2L);
+        when(daoMock.update(expected)).thenReturn(2L);
         id = genreService.save(expected);
         assertEquals(2, id.intValue());
         verify(daoMock, times(1)).update(expected);
@@ -47,11 +47,11 @@ public class GenreServiceImplTest {
 
     @Test
     public void findByIdTest() throws Exception {
-        Genre expected = new Genre(1, "");
-        when(daoMock.findById(1)).thenReturn(expected);
-        Genre genre = genreService.findById(1);
+        Genre expected = new Genre(1L, "");
+        when(daoMock.findById(1L)).thenReturn(expected);
+        Genre genre = genreService.findById(1L);
         assertEquals(expected, genre);
-        verify(daoMock, times(1)).findById(1);
+        verify(daoMock, times(1)).findById(1L);
     }
 
     @Test
@@ -74,8 +74,8 @@ public class GenreServiceImplTest {
 
     @Test
     public void deleteByIdTest() throws Exception {
-        genreService.deleteById(1);
-        verify(daoMock, times(1)).deleteById(1);
+        genreService.deleteById(1L);
+        verify(daoMock, times(1)).deleteById(1L);
     }
 
     @Test

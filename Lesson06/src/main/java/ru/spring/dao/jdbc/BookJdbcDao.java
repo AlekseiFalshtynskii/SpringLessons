@@ -5,8 +5,10 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import ru.spring.dao.AuthorDao;
 import ru.spring.dao.BookDao;
-import ru.spring.mapper.BookMapper;
+import ru.spring.dao.GenreDao;
+import ru.spring.mapper.BookSetExtractor;
 import ru.spring.model.Book;
 
 import java.util.HashMap;
@@ -18,37 +20,34 @@ import static java.util.Collections.singletonMap;
 import static java.util.Objects.isNull;
 
 @Repository
-public class BookJdbcDao implements BookDao<Book, Integer> {
+public class BookJdbcDao implements BookDao {
     private final NamedParameterJdbcOperations jdbc;
-    private final BookMapper mapper;
-    private final AuthorJdbcDao authorDao;
-    private final GenreJdbcDao genreDao;
+    private final AuthorDao authorDao;
+    private final GenreDao genreDao;
 
     public BookJdbcDao(NamedParameterJdbcOperations jdbc,
-                       BookMapper bookMapper,
-                       AuthorJdbcDao authorDao,
-                       GenreJdbcDao genreDao) {
+                       AuthorDao authorDao,
+                       GenreDao genreDao) {
         this.jdbc = jdbc;
-        this.mapper = bookMapper;
         this.authorDao = authorDao;
         this.genreDao = genreDao;
     }
 
     @Override
-    public Integer insert(Book book) {
+    public Long insert(Book book) {
         String query = "INSERT INTO book (name, description) VALUES (:name, :description)";
         MapSqlParameterSource source = new MapSqlParameterSource();
         source.addValue("name", book.getName());
         source.addValue("description", book.getDescription());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbc.update(query, source, keyHolder, new String[]{"id"});
-        Integer id = keyHolder.getKey().intValue();
+        Long id = keyHolder.getKey().longValue();
         bindBookAuthorAndGenre(book, id);
         return id;
     }
 
     @Override
-    public Integer update(Book book) {
+    public Long update(Book book) {
         String query = "UPDATE book SET name = :name, description = :description WHERE id = :id";
         Map<String, Object> params = new HashMap<>(3);
         params.put("id", book.getId());
@@ -60,16 +59,30 @@ public class BookJdbcDao implements BookDao<Book, Integer> {
     }
 
     @Override
-    public Book findById(Integer id) {
-        String query = "SELECT * FROM book WHERE id = :id";
-        Map<String, Integer> params = singletonMap("id", id);
-        return jdbc.queryForObject(query, params, mapper);
+    public Book findById(Long id) {
+        String query = "SELECT book.id as id, book.name as name, book.description as description, " +
+                "   author.id as author_id, author.lastname as lastname, author.firstname as firstname, " +
+                "   genre.id as genre_id, genre.name as genre_name FROM book " +
+                "JOIN book_author ON book_author.book_id = book.id " +
+                "JOIN author ON author.id = book_author.author_id " +
+                "JOIN book_genre ON book_genre.book_id = book.id " +
+                "JOIN genre ON genre.id = book_genre.genre_id " +
+                "WHERE book.id = :id";
+        Map<String, Long> params = singletonMap("id", id);
+        List<Book> books = jdbc.query(query, params, new BookSetExtractor());
+        return books.isEmpty() ? null : books.get(0);
     }
 
     @Override
     public List<Book> findAll() {
-        String query = "SELECT * FROM book";
-        return jdbc.query(query, mapper);
+        String query = "SELECT book.id as id, book.name as name, book.description as description, " +
+                "   author.id as author_id, author.lastname as lastname, author.firstname as firstname, " +
+                "   genre.id as genre_id, genre.name as genre_name FROM book " +
+                "JOIN book_author ON book_author.book_id = book.id " +
+                "JOIN author ON author.id = book_author.author_id " +
+                "JOIN book_genre ON book_genre.book_id = book.id " +
+                "JOIN genre ON genre.id = book_genre.genre_id";
+        return jdbc.query(query, new BookSetExtractor());
     }
 
     @Override
@@ -79,9 +92,9 @@ public class BookJdbcDao implements BookDao<Book, Integer> {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         String query = "DELETE FROM book WHERE id = :id";
-        Map<String, Integer> params = singletonMap("id", id);
+        Map<String, Long> params = singletonMap("id", id);
         jdbc.update(query, params);
     }
 
@@ -91,10 +104,10 @@ public class BookJdbcDao implements BookDao<Book, Integer> {
         jdbc.update(query, emptyMap());
     }
 
-    private void bindBookAuthorAndGenre(Book book, Integer bookId) {
+    private void bindBookAuthorAndGenre(Book book, Long bookId) {
         if (!isNull(book.getAuthors())) {
             book.getAuthors().forEach(author -> {
-                Integer authorId;
+                Long authorId;
                 if (author.getId() == null) {
                     authorId = authorDao.insert(author);
                 } else {
@@ -105,7 +118,7 @@ public class BookJdbcDao implements BookDao<Book, Integer> {
         }
         if (!isNull(book.getGenres())) {
             book.getGenres().forEach(genre -> {
-                Integer genreId;
+                Long genreId;
                 if (genre.getId() == null) {
                     genreId = genreDao.insert(genre);
                 } else {
@@ -116,37 +129,37 @@ public class BookJdbcDao implements BookDao<Book, Integer> {
         }
     }
 
-    private void bindBookAuthor(Integer bookId, Integer authorId) {
+    private void bindBookAuthor(Long bookId, Long authorId) {
         if (countBookAuthor(bookId, authorId) == 0) {
             String query = "INSERT INTO book_author (book_id, author_id) VALUES (:bookId, :authorId)";
-            Map<String, Integer> params = new HashMap<>(2);
+            Map<String, Long> params = new HashMap<>(2);
             params.put("bookId", bookId);
             params.put("authorId", authorId);
             jdbc.update(query, params);
         }
     }
 
-    private long countBookAuthor(Integer bookId, Integer authorId) {
+    private long countBookAuthor(Long bookId, Long authorId) {
         String query = "SELECT count(*) FROM book_author WHERE book_id = :bookId AND author_id = :authorId";
-        Map<String, Integer> params = new HashMap<>(2);
+        Map<String, Long> params = new HashMap<>(2);
         params.put("bookId", bookId);
         params.put("authorId", authorId);
         return jdbc.queryForObject(query, params, Long.class);
     }
 
-    private void bindBookGenre(Integer bookId, Integer genreId) {
+    private void bindBookGenre(Long bookId, Long genreId) {
         if (countBookGenre(bookId, genreId) == 0) {
             String query = "INSERT INTO book_genre (book_id, genre_id) VALUES (:bookId, :genreId)";
-            Map<String, Integer> params = new HashMap<>(2);
+            Map<String, Long> params = new HashMap<>(2);
             params.put("bookId", bookId);
             params.put("genreId", genreId);
             jdbc.update(query, params);
         }
     }
 
-    private long countBookGenre(Integer bookId, Integer genreId) {
+    private long countBookGenre(Long bookId, Long genreId) {
         String query = "SELECT count(*) FROM book_genre WHERE book_id = :bookId AND genre_id = :genreId";
-        Map<String, Integer> params = new HashMap<>(2);
+        Map<String, Long> params = new HashMap<>(2);
         params.put("bookId", bookId);
         params.put("genreId", genreId);
         return jdbc.queryForObject(query, params, Long.class);

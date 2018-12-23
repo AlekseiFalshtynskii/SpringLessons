@@ -5,15 +5,15 @@ import ru.spring.model.Genre;
 import java.util.List;
 
 public interface GenreService {
-    Integer save(Genre genre);
+    Long save(Genre genre);
 
-    Genre findById(Integer id);
+    Genre findById(Long id);
 
     List<Genre> findAll();
 
     long count();
 
-    void deleteById(Integer id);
+    void deleteById(Long id);
 
     void deleteAll();
 }

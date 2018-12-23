@@ -21,7 +21,7 @@ public class GenreCommands {
     }
 
     @ShellMethod("Find genre by id")
-    public String findByIdGenre(@ShellOption Integer id) {
+    public String findByIdGenre(@ShellOption Long id) {
         Genre genre = genreService.findById(id);
         return genre == null ? "Genre not found by id = " + id : "Finded " + genre.toString();
     }
@@ -37,7 +37,7 @@ public class GenreCommands {
     }
 
     @ShellMethod("Delete genre by id")
-    public String deleteByIdGenre(Integer id) {
+    public String deleteByIdGenre(Long id) {
         genreService.deleteById(id);
         return "Deleted genre by id = " + id;
     }

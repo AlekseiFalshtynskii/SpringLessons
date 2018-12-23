@@ -1,7 +1,6 @@
 package ru.spring.dao;
 
-import java.util.List;
+import ru.spring.model.Genre;
 
-public interface GenreDao<T, ID> extends Dao<T, ID> {
-    List<T> findByBookId(ID bookId);
+public interface GenreDao extends Dao<Genre, Long> {
 }

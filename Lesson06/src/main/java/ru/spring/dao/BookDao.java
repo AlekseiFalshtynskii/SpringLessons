@@ -1,4 +1,6 @@
 package ru.spring.dao;
 
-public interface BookDao<T, ID> extends Dao<T, ID> {
+import ru.spring.model.Book;
+
+public interface BookDao extends Dao<Book, Long> {
 }

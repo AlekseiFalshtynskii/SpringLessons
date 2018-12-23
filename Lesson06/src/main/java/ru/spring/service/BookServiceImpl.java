@@ -1,21 +1,21 @@
 package ru.spring.service;
 
 import org.springframework.stereotype.Service;
-import ru.spring.dao.jdbc.BookJdbcDao;
+import ru.spring.dao.BookDao;
 import ru.spring.model.Book;
 
 import java.util.List;
 
 @Service
 public class BookServiceImpl implements BookService {
-    private final BookJdbcDao dao;
+    private final BookDao dao;
 
-    public BookServiceImpl(BookJdbcDao dao) {
+    public BookServiceImpl(BookDao dao) {
         this.dao = dao;
     }
 
     @Override
-    public Integer save(Book book) {
+    public Long save(Book book) {
         if (book.getId() == null) {
             return dao.insert(book);
         } else {
@@ -24,7 +24,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book findById(Integer id) {
+    public Book findById(Long id) {
         return dao.findById(id);
     }
 
@@ -39,7 +39,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         dao.deleteById(id);
     }
 

@@ -8,7 +8,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.spring.dao.jdbc.AuthorJdbcDao;
+import ru.spring.dao.AuthorDao;
 import ru.spring.model.Author;
 
 import java.util.List;
@@ -24,22 +24,22 @@ import static org.mockito.Mockito.*;
 })
 public class AuthorServiceImplTest {
     @MockBean
-    private AuthorJdbcDao daoMock;
+    private AuthorDao daoMock;
     @Autowired
     private AuthorService authorService;
 
     @Test
     public void saveTest() throws Exception {
         Author expected = new Author("", "");
-        when(daoMock.insert(expected)).thenReturn(1);
-        when(daoMock.update(expected)).thenReturn(1);
-        Integer id = authorService.save(expected);
+        when(daoMock.insert(expected)).thenReturn(1L);
+        when(daoMock.update(expected)).thenReturn(1L);
+        Long id = authorService.save(expected);
         assertEquals(1, id.intValue());
         verify(daoMock, times(1)).insert(expected);
 
-        expected = new Author(2, "", "");
-        when(daoMock.insert(expected)).thenReturn(2);
-        when(daoMock.update(expected)).thenReturn(2);
+        expected = new Author(2L, "", "");
+        when(daoMock.insert(expected)).thenReturn(2L);
+        when(daoMock.update(expected)).thenReturn(2L);
         id = authorService.save(expected);
         assertEquals(2, id.intValue());
         verify(daoMock, times(1)).update(expected);
@@ -47,11 +47,11 @@ public class AuthorServiceImplTest {
 
     @Test
     public void findByIdTest() throws Exception {
-        Author expected = new Author(1, "", "");
-        when(daoMock.findById(1)).thenReturn(expected);
-        Author author = authorService.findById(1);
+        Author expected = new Author(1L, "", "");
+        when(daoMock.findById(1L)).thenReturn(expected);
+        Author author = authorService.findById(1L);
         assertEquals(expected, author);
-        verify(daoMock, times(1)).findById(1);
+        verify(daoMock, times(1)).findById(1L);
     }
 
     @Test
@@ -74,8 +74,8 @@ public class AuthorServiceImplTest {
 
     @Test
     public void deleteByIdTest() throws Exception {
-        authorService.deleteById(1);
-        verify(daoMock, times(1)).deleteById(1);
+        authorService.deleteById(1L);
+        verify(daoMock, times(1)).deleteById(1L);
     }
 
     @Test
