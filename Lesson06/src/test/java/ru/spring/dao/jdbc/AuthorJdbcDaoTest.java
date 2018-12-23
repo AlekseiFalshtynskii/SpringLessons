@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.spring.dao.AuthorDao;
 import ru.spring.model.Author;
@@ -13,12 +14,14 @@ import ru.spring.model.Author;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_CLASS;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(properties = {
         InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
         ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false"
 })
+@DirtiesContext(classMode = BEFORE_CLASS)
 public class AuthorJdbcDaoTest {
     @Autowired
     private AuthorDao dao;
