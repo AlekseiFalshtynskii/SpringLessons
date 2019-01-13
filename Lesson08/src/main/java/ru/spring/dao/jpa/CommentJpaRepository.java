@@ -21,13 +21,12 @@ public class CommentJpaRepository implements CommentDao {
     @Override
     public Long insert(Comment comment) {
         em.persist(comment);
-        em.flush();
         return comment.getId();
     }
 
     @Override
     public Long update(Comment comment) {
-        em.persist(comment);
+        em.merge(comment);
         return comment.getId();
     }
 

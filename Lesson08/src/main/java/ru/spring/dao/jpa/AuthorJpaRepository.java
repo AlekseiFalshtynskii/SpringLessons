@@ -21,13 +21,12 @@ public class AuthorJpaRepository implements AuthorDao {
     @Override
     public Long insert(Author author) {
         em.persist(author);
-        em.flush();
         return author.getId();
     }
 
     @Override
     public Long update(Author author) {
-        em.persist(author);
+        em.merge(author);
         return author.getId();
     }
 

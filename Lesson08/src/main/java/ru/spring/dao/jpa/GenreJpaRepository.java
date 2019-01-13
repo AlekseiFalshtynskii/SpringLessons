@@ -21,13 +21,12 @@ public class GenreJpaRepository implements GenreDao {
     @Override
     public Long insert(Genre genre) {
         em.persist(genre);
-        em.flush();
         return genre.getId();
     }
 
     @Override
     public Long update(Genre genre) {
-        em.persist(genre);
+        em.merge(genre);
         return genre.getId();
     }
 
