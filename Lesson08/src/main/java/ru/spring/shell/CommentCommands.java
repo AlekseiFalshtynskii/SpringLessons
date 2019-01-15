@@ -26,6 +26,11 @@ public class CommentCommands {
         return comment == null ? "Comment not found by id = " + id : "Finded " + comment.toString();
     }
 
+    @ShellMethod("Find comments by book")
+    public String findByBookIdComment(@ShellOption Long bookId) {
+        return commentService.findByBookId(bookId).toString();
+    }
+
     @ShellMethod("Find all comments")
     public String findAllComment() {
         return commentService.findAll().toString();

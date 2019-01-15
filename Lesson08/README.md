@@ -27,9 +27,10 @@ $ delete-by-id-book 1
 $ delete-all-book
 ```
 ```
-$ save-comment '{message:"Крутая книга",bookId:1}'
-$ save-comment '{id:1,message:"Не очень книга",bookId:1}'
+$ save-comment '{message:"Крутая книга",book:{id:1}}'
+$ save-comment '{id:1,message:"Не очень книга",book:{id:1}}'
 $ find-by-id-comment 1
+$ find-by-book-id-comment 1
 $ find-all-comment
 $ count-comment
 $ delete-by-id-comment 1

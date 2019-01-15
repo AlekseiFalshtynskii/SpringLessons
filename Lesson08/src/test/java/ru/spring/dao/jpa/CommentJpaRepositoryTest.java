@@ -14,11 +14,12 @@ import ru.spring.model.Comment;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static ru.spring.model.Book.bookOf;
 import static ru.spring.model.Comment.commentOf;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@ComponentScan("ru.spring")
+@ComponentScan("ru.spring.dao")
 public class CommentJpaRepositoryTest {
     @Autowired
     private CommentDao dao;
@@ -27,9 +28,10 @@ public class CommentJpaRepositoryTest {
 
     @Test
     public void crud() throws Exception {
-        Long bookId = bookDao.insert(Book.bookOf("Книга", "Какая-то", null, null, null));
+        Long bookId = bookDao.insert(Book.bookOf("Книга", "Какая-то", null, null));
 
-        Comment expected = commentOf("Комментарий", bookId);
+        Book book = bookOf(1L, "", "", null, null);
+        Comment expected = commentOf("Комментарий", book);
         Long id = dao.insert(expected);
 
         Comment comment = dao.findById(id);
@@ -46,8 +48,8 @@ public class CommentJpaRepositoryTest {
         assertEquals(0, comments.size());
         assertEquals(0, dao.count());
 
-        dao.insert(commentOf("Комментарий", bookId));
-        dao.insert(commentOf("Комментарий", bookId));
+        dao.insert(commentOf("Комментарий", book));
+        dao.insert(commentOf("Комментарий", book));
         comments = dao.findAll();
         assertEquals(2, comments.size());
         assertEquals(2, dao.count());

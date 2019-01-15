@@ -31,14 +31,14 @@ public class BookServiceImplTest {
 
     @Test
     public void saveTest() throws Exception {
-        Book expected = bookOf("", "", emptyList(), emptyList(), emptyList());
+        Book expected = bookOf("", "", emptyList(), emptyList());
         when(daoMock.insert(expected)).thenReturn(1L);
         when(daoMock.update(expected)).thenReturn(1L);
         Long id = bookService.save(expected);
         assertEquals(1, id.intValue());
         verify(daoMock, times(1)).insert(expected);
 
-        expected = bookOf(2L, "", "", emptyList(), emptyList(), emptyList());
+        expected = bookOf(2L, "", "", emptyList(), emptyList());
         when(daoMock.insert(expected)).thenReturn(2L);
         when(daoMock.update(expected)).thenReturn(2L);
         id = bookService.save(expected);
@@ -48,7 +48,7 @@ public class BookServiceImplTest {
 
     @Test
     public void findByIdTest() throws Exception {
-        Book expected = bookOf(1L, "", "", emptyList(), emptyList(), emptyList());
+        Book expected = bookOf(1L, "", "", emptyList(), emptyList());
         when(daoMock.findById(1L)).thenReturn(expected);
         Book book = bookService.findById(1L);
         assertEquals(expected, book);

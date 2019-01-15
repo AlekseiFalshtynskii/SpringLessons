@@ -21,7 +21,7 @@ import static ru.spring.model.Genre.genreOf;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@ComponentScan("ru.spring")
+@ComponentScan("ru.spring.dao")
 public class BookJpaRepositoryTest {
     @Autowired
     private BookDao dao;
@@ -36,7 +36,7 @@ public class BookJpaRepositoryTest {
                 genreOf("Фантастика"),
                 genreOf("Фэнтези")
         );
-        Book expected = bookOf("Название", "Описание", authors, genres, null);
+        Book expected = bookOf("Название", "Описание", authors, genres);
         Long id = dao.insert(expected);
 
         Book book = dao.findById(id);
@@ -61,8 +61,8 @@ public class BookJpaRepositoryTest {
         assertEquals(0, books.size());
         assertEquals(0, dao.count());
 
-        dao.insert(bookOf("Название", "Описание", null, null, null));
-        dao.insert(bookOf("Название", "Описание", null, null, null));
+        dao.insert(bookOf("Название", "Описание", null, null));
+        dao.insert(bookOf("Название", "Описание", null, null));
         books = dao.findAll();
         assertEquals(2, books.size());
         assertEquals(2, dao.count());

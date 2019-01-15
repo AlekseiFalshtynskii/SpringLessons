@@ -1,9 +1,6 @@
 package ru.spring.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Comment {
@@ -11,24 +8,26 @@ public class Comment {
     @GeneratedValue
     private Long id;
     private String message;
-    @Column(name = "book_id")
-    private Long bookId;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "book_id")
+    private Book book;
 
     public Comment() {
     }
 
-    protected Comment(Long id, String message, Long bookId) {
+    protected Comment(Long id, String message, Book book) {
         this.id = id;
         this.message = message;
-        this.bookId = bookId;
+        this.book = book;
     }
 
-    public static Comment commentOf(Long id, String message, Long bookId) {
-        return new Comment(id, message, bookId);
+    public static Comment commentOf(Long id, String message, Book book) {
+        return new Comment(id, message, book);
     }
 
-    public static Comment commentOf(String message, Long bookId) {
-        return commentOf(null, message, bookId);
+    public static Comment commentOf(String message, Book book) {
+        return commentOf(null, message, book);
     }
 
     public Long getId() {
@@ -39,13 +38,13 @@ public class Comment {
         return message;
     }
 
-    public Long getBookId() {
-        return bookId;
+    public Book getBook() {
+        return book;
     }
 
     @Override
     public String toString() {
-        return "Comment(" + getId() + ", " + getMessage() + ", " + getBookId() + ")";
+        return "Comment(" + getId() + ", " + getMessage() + ")";
     }
 
     @Override
@@ -62,13 +61,13 @@ public class Comment {
         Comment other = (Comment) obj;
         return getId() == null ? other.getId() == null : getId().equals(other.getId())
                 && getMessage() == null ? other.getMessage() == null : getMessage().equals(other.getMessage())
-                && getBookId() == null ? other.getBookId() == null : getBookId().equals(other.getBookId());
+                && getBook() == null ? other.getBook() == null : getBook().equals(other.getBook());
     }
 
     @Override
     public int hashCode() {
         return (getId() == null ? 0 : getId().hashCode())
                 + (getMessage() == null ? 0 : getMessage().hashCode())
-                + (getBookId() == null ? 0 : getBookId().hashCode());
+                + (getBook() == null ? 0 : getBook().hashCode());
     }
 }

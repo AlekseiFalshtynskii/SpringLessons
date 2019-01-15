@@ -29,6 +29,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public List<Comment> findByBookId(Long bookId) {
+        return dao.findByBookId(bookId);
+    }
+
+    @Override
     public List<Comment> findAll() {
         return dao.findAll();
     }

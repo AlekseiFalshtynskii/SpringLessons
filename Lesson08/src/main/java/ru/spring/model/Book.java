@@ -11,7 +11,7 @@ public class Book {
     private String name;
     private String description;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(
             name = "book_author",
             joinColumns = @JoinColumn(name = "book_id"),
@@ -19,7 +19,7 @@ public class Book {
     )
     private List<Author> authors;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(
             name = "book_genre",
             joinColumns = @JoinColumn(name = "book_id"),
@@ -27,28 +27,23 @@ public class Book {
     )
     private List<Genre> genres;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "book_id")
-    private List<Comment> comments;
-
     public Book() {
     }
 
-    protected Book(Long id, String name, String description, List<Author> authors, List<Genre> genres, List<Comment> comments) {
+    protected Book(Long id, String name, String description, List<Author> authors, List<Genre> genres) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.authors = authors;
         this.genres = genres;
-        this.comments = comments;
     }
 
-    public static Book bookOf(Long id, String name, String description, List<Author> authors, List<Genre> genres, List<Comment> comments) {
-        return new Book(id, name, description, authors, genres, comments);
+    public static Book bookOf(Long id, String name, String description, List<Author> authors, List<Genre> genres) {
+        return new Book(id, name, description, authors, genres);
     }
 
-    public static Book bookOf(String name, String description, List<Author> authors, List<Genre> genres, List<Comment> comments) {
-        return bookOf(null, name, description, authors, genres, comments);
+    public static Book bookOf(String name, String description, List<Author> authors, List<Genre> genres) {
+        return bookOf(null, name, description, authors, genres);
     }
 
     public Long getId() {
@@ -71,14 +66,10 @@ public class Book {
         return genres;
     }
 
-    public List<Comment> getComments() {
-        return comments;
-    }
-
     @Override
     public String toString() {
         return "Book(" + getId() + ", " + getName() + ", " + getDescription() + ", (" + getAuthors() + "), ("
-                + getGenres() + "), (" + getComments() + "))";
+                + getGenres() + "))";
     }
 
     @Override

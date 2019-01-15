@@ -37,7 +37,7 @@ public class GenreJpaRepository implements GenreDao {
 
     @Override
     public List<Genre> findAll() {
-        TypedQuery<Genre> query = em.createQuery("select a from Genre a", Genre.class);
+        TypedQuery<Genre> query = em.createQuery("select g from Genre g", Genre.class);
         return query.getResultList();
     }
 
@@ -48,14 +48,14 @@ public class GenreJpaRepository implements GenreDao {
 
     @Override
     public void deleteById(Long id) {
-        Query query = em.createQuery("delete from Genre a where a.id = :id");
+        Query query = em.createQuery("delete from Genre g where g.id = :id");
         query.setParameter("id", id);
         query.executeUpdate();
     }
 
     @Override
     public void deleteAll() {
-        Query query = em.createQuery("delete from Genre a");
+        Query query = em.createQuery("delete from Genre g");
         query.executeUpdate();
     }
 }

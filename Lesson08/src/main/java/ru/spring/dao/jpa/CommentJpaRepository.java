@@ -3,6 +3,7 @@ package ru.spring.dao.jpa;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.spring.dao.CommentDao;
+import ru.spring.model.Book;
 import ru.spring.model.Comment;
 
 import javax.persistence.EntityManager;
@@ -10,6 +11,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
+
+import static ru.spring.model.Comment.commentOf;
 
 @SuppressWarnings("JpaQlInspection")
 @Repository
@@ -20,12 +23,14 @@ public class CommentJpaRepository implements CommentDao {
 
     @Override
     public Long insert(Comment comment) {
+        comment = commentOf(comment.getMessage(), em.find(Book.class, comment.getBook().getId()));
         em.persist(comment);
         return comment.getId();
     }
 
     @Override
     public Long update(Comment comment) {
+        comment = commentOf(comment.getId(), comment.getMessage(), em.find(Book.class, comment.getBook().getId()));
         em.merge(comment);
         return comment.getId();
     }
@@ -37,7 +42,7 @@ public class CommentJpaRepository implements CommentDao {
 
     @Override
     public List<Comment> findAll() {
-        TypedQuery<Comment> query = em.createQuery("select a from Comment a", Comment.class);
+        TypedQuery<Comment> query = em.createQuery("select c from Comment c", Comment.class);
         return query.getResultList();
     }
 
@@ -48,14 +53,21 @@ public class CommentJpaRepository implements CommentDao {
 
     @Override
     public void deleteById(Long id) {
-        Query query = em.createQuery("delete from Comment a where a.id = :id");
+        Query query = em.createQuery("delete from Comment c where c.id = :id");
         query.setParameter("id", id);
         query.executeUpdate();
     }
 
     @Override
     public void deleteAll() {
-        Query query = em.createQuery("delete from Comment a");
+        Query query = em.createQuery("delete from Comment c");
         query.executeUpdate();
+    }
+
+    @Override
+    public List<Comment> findByBookId(Long bookId) {
+        TypedQuery<Comment> query = em.createQuery("select c from Comment c where c.book.id = :bookId", Comment.class);
+        query.setParameter("bookId", bookId);
+        return query.getResultList();
     }
 }

@@ -16,7 +16,7 @@ import static ru.spring.model.Author.authorOf;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@ComponentScan("ru.spring")
+@ComponentScan("ru.spring.dao")
 public class AuthorJpaRepositoryTest {
     @Autowired
     private AuthorDao dao;

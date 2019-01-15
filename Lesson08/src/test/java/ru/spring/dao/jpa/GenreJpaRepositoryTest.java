@@ -16,7 +16,7 @@ import static ru.spring.model.Genre.genreOf;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@ComponentScan("ru.spring")
+@ComponentScan("ru.spring.dao")
 public class GenreJpaRepositoryTest {
     @Autowired
     private GenreDao dao;

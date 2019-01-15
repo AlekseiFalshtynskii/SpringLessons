@@ -16,6 +16,7 @@ import java.util.List;
 import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+import static ru.spring.model.Book.bookOf;
 import static ru.spring.model.Comment.commentOf;
 
 @RunWith(SpringRunner.class)
@@ -31,14 +32,14 @@ public class CommentServiceImplTest {
 
     @Test
     public void saveTest() throws Exception {
-        Comment expected = commentOf("", 0L);
+        Comment expected = commentOf("", bookOf(1L, "", "", null, null));
         when(daoMock.insert(expected)).thenReturn(1L);
         when(daoMock.update(expected)).thenReturn(1L);
         Long id = commentService.save(expected);
         assertEquals(1, id.intValue());
         verify(daoMock, times(1)).insert(expected);
 
-        expected = commentOf(2L, "", 0L);
+        expected = commentOf(2L, "", bookOf(1L, "", "", null, null));
         when(daoMock.insert(expected)).thenReturn(2L);
         when(daoMock.update(expected)).thenReturn(2L);
         id = commentService.save(expected);
@@ -48,7 +49,7 @@ public class CommentServiceImplTest {
 
     @Test
     public void findByIdTest() throws Exception {
-        Comment expected = commentOf(1L, "", 0L);
+        Comment expected = commentOf(1L, "", bookOf(1L, "", "", null, null));
         when(daoMock.findById(1L)).thenReturn(expected);
         Comment comment = commentService.findById(1L);
         assertEquals(expected, comment);

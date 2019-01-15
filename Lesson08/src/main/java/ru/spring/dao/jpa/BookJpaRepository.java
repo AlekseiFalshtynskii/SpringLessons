@@ -33,40 +33,38 @@ public class BookJpaRepository implements BookDao {
     @Override
     public Book findById(Long id) {
         Book book = em.find(Book.class, id);
-        book.getAuthors();
-        book.getGenres();
-        book.getComments();
+//        book.getAuthors();
+//        book.getGenres();
         return em.find(Book.class, id);
     }
 
     @Override
     public List<Book> findAll() {
-        TypedQuery<Book> query = em.createQuery("select a from Book a", Book.class);
+        TypedQuery<Book> query = em.createQuery("select b from Book b", Book.class);
         List<Book> books = query.getResultList();
-        books.forEach(book -> {
-            book.getAuthors();
-            book.getGenres();
-            book.getComments();
-        });
+//        books.forEach(book -> {
+//            book.getAuthors();
+//            book.getGenres();
+//        });
         return books;
     }
 
     @Override
     public long count() {
-        TypedQuery<Book> query = em.createQuery("select a from Book a", Book.class);
+        TypedQuery<Book> query = em.createQuery("select b from Book b", Book.class);
         return query.getResultList().size();
     }
 
     @Override
     public void deleteById(Long id) {
-        Query query = em.createQuery("delete from Book a where a.id = :id");
+        Query query = em.createQuery("delete from Book b where b.id = :id");
         query.setParameter("id", id);
         query.executeUpdate();
     }
 
     @Override
     public void deleteAll() {
-        Query query = em.createQuery("delete from Book a");
+        Query query = em.createQuery("delete from Book b");
         query.executeUpdate();
     }
 }

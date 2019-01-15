@@ -9,6 +9,8 @@ public interface CommentService {
 
     Comment findById(Long id);
 
+    List<Comment> findByBookId(Long bookId);
+
     List<Comment> findAll();
 
     long count();
