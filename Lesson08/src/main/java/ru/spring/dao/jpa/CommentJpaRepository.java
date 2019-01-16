@@ -3,7 +3,6 @@ package ru.spring.dao.jpa;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.spring.dao.CommentDao;
-import ru.spring.model.Book;
 import ru.spring.model.Comment;
 
 import javax.persistence.EntityManager;
@@ -11,8 +10,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
-
-import static ru.spring.model.Comment.commentOf;
 
 @SuppressWarnings("JpaQlInspection")
 @Repository
@@ -23,14 +20,12 @@ public class CommentJpaRepository implements CommentDao {
 
     @Override
     public Long insert(Comment comment) {
-        comment = commentOf(comment.getMessage(), em.find(Book.class, comment.getBook().getId()));
         em.persist(comment);
         return comment.getId();
     }
 
     @Override
     public Long update(Comment comment) {
-        comment = commentOf(comment.getId(), comment.getMessage(), em.find(Book.class, comment.getBook().getId()));
         em.merge(comment);
         return comment.getId();
     }
