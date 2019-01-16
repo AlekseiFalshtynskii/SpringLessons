@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.shell.jline.InteractiveShellApplicationRunner;
 import org.springframework.shell.jline.ScriptShellApplicationRunner;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.spring.dao.CommentDao;
 import ru.spring.model.Comment;
@@ -24,6 +25,7 @@ import static ru.spring.model.Comment.commentOf;
         InteractiveShellApplicationRunner.SPRING_SHELL_INTERACTIVE_ENABLED + "=false",
         ScriptShellApplicationRunner.SPRING_SHELL_SCRIPT_ENABLED + "=false"
 })
+@DirtiesContext
 public class CommentServiceImplTest {
     @MockBean
     private CommentDao daoMock;
@@ -84,5 +86,14 @@ public class CommentServiceImplTest {
     public void deleteAllTest() throws Exception {
         commentService.deleteAll();
         verify(daoMock, times(1)).deleteAll();
+    }
+
+    @Test
+    public void findByBookIdTest() throws Exception {
+        List<Comment> expected = emptyList();
+        when(daoMock.findByBookId(1L)).thenReturn(expected);
+        List<Comment> comments = commentService.findByBookId(1L);
+        assertEquals(expected, comments);
+        verify(daoMock, times(1)).findByBookId(1L);
     }
 }

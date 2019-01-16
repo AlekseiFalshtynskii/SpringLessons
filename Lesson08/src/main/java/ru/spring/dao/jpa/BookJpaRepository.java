@@ -26,33 +26,24 @@ public class BookJpaRepository implements BookDao {
 
     @Override
     public Long update(Book book) {
-        em.persist(book);
+        em.merge(book);
         return book.getId();
     }
 
     @Override
     public Book findById(Long id) {
-        Book book = em.find(Book.class, id);
-//        book.getAuthors();
-//        book.getGenres();
         return em.find(Book.class, id);
     }
 
     @Override
     public List<Book> findAll() {
         TypedQuery<Book> query = em.createQuery("select b from Book b", Book.class);
-        List<Book> books = query.getResultList();
-//        books.forEach(book -> {
-//            book.getAuthors();
-//            book.getGenres();
-//        });
-        return books;
+        return query.getResultList();
     }
 
     @Override
     public long count() {
-        TypedQuery<Book> query = em.createQuery("select b from Book b", Book.class);
-        return query.getResultList().size();
+        return findAll().size();
     }
 
     @Override

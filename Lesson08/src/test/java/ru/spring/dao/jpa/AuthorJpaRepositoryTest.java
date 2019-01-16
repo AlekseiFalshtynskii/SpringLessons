@@ -5,52 +5,77 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.spring.dao.AuthorDao;
 import ru.spring.model.Author;
 
 import java.util.List;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertEquals;
 import static ru.spring.model.Author.authorOf;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
+@DirtiesContext
 @ComponentScan("ru.spring.dao")
 public class AuthorJpaRepositoryTest {
+    private static final Author author1 = authorOf(1L, "Уоллс", "Крейг");
+    private static final Author author2 = authorOf(2L, "Жемеров", "Дмитрий");
+    private static final Author author3 = authorOf(3L, "Исакова", "Светлана");
+
     @Autowired
     private AuthorDao dao;
 
     @Test
-    public void crud() throws Exception {
-        Author expected = authorOf("Фамилия", "Имя");
-        Long id = dao.insert(expected);
+    public void insertTest() {
+        Author author = authorOf("Иванов", "Иван");
+        Long id = dao.insert(author);
+        assertEquals(4, id.longValue());
+    }
 
-        Author author = dao.findById(id);
-        assertEquals(id, author.getId());
-        assertEquals(expected.getLastName(), author.getLastName());
-        assertEquals(expected.getFirstName(), author.getFirstName());
-        assertEquals(1, dao.count());
+    @Test
+    public void updateTest() {
+        Author expected = authorOf(1L, "Кантелон", "Майк");
+        dao.update(expected);
+        Author actual = dao.findById(1L);
+        assertEquals(expected, actual);
+    }
 
-        List<Author> authors = dao.findAll();
-        assertEquals(1, authors.size());
-        assertEquals(expected.getLastName(), authors.get(0).getLastName());
-        assertEquals(expected.getFirstName(), authors.get(0).getFirstName());
+    @Test
+    public void findByIdTest() {
+        Author expected = author1;
+        Author actual = dao.findById(1L);
+        assertEquals(expected, actual);
+    }
 
-        dao.deleteById(id);
-        authors = dao.findAll();
-        assertEquals(0, authors.size());
-        assertEquals(0, dao.count());
+    @Test
+    public void findAllTest() {
+        List<Author> expected = asList(author1, author2, author3);
+        List<Author> actual = dao.findAll();
+        assertEquals(expected, actual);
+    }
 
-        dao.insert(authorOf("Иванов", "Иван"));
-        dao.insert(authorOf("Петров", "Петр"));
-        authors = dao.findAll();
-        assertEquals(2, authors.size());
-        assertEquals(2, dao.count());
+    @Test
+    public void countTest() {
+        assertEquals(3, dao.count());
+    }
 
+    @Test
+    public void deleteByIdTest() {
+        List<Author> expected = asList(author1, author2);
+        dao.deleteById(3L);
+        List<Author> actual = dao.findAll();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void deleteAllTest() {
+        List<Author> expected = emptyList();
         dao.deleteAll();
-        authors = dao.findAll();
-        assertEquals(0, authors.size());
-        assertEquals(0, dao.count());
+        List<Author> actual = dao.findAll();
+        assertEquals(expected, actual);
     }
 }
