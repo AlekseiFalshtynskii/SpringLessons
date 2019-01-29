@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeConvertEvent;
 import org.springframework.data.mongodb.core.mapping.event.BeforeDeleteEvent;
+import org.springframework.data.mongodb.core.mapping.event.MongoMappingEvent;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 import ru.spring.model.Author;
@@ -40,5 +41,15 @@ public class BookEventListener extends AbstractMongoEventListener<Book> {
     public void onBeforeDelete(BeforeDeleteEvent<Book> event) {
         Query query = query(where("book.id").is(event.getSource().getObjectId("_id").toHexString()));
         mongoOperations.remove(query, Comment.class);
+    }
+
+    @Override
+    public void onApplicationEvent(MongoMappingEvent<?> event) {
+        if (event instanceof BeforeDeleteEvent
+                && "book".equals(event.getCollectionName())
+                && event.getDocument().isEmpty()) {
+            mongoOperations.remove(Comment.class);
+        }
+        super.onApplicationEvent(event);
     }
 }

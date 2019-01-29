@@ -3,19 +3,15 @@ package ru.spring.service;
 import org.springframework.stereotype.Service;
 import ru.spring.model.Book;
 import ru.spring.repository.BookRepository;
-import ru.spring.repository.CommentRepository;
 
 import java.util.List;
 
 @Service
 public class BookServiceImpl implements BookService {
     private final BookRepository repository;
-    private final CommentRepository commentRepository;
 
-    public BookServiceImpl(BookRepository repository,
-                           CommentRepository commentRepository) {
+    public BookServiceImpl(BookRepository repository) {
         this.repository = repository;
-        this.commentRepository = commentRepository;
     }
 
     @Override
@@ -45,7 +41,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteAll() {
-        commentRepository.deleteAll();
         repository.deleteAll();
     }
 }
