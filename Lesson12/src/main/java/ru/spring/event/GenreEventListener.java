@@ -1,6 +1,7 @@
 package ru.spring.event;
 
 import com.mongodb.MongoException;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeDeleteEvent;
@@ -26,7 +27,7 @@ public class GenreEventListener extends AbstractMongoEventListener<Genre> {
 
     @Override
     public void onBeforeDelete(BeforeDeleteEvent<Genre> event) {
-        Query query = query(where("genres.id").is(event.getSource().getObjectId("_id").toHexString()));
+        Query query = query(where("genres.$id").is(event.getSource().getObjectId("_id")));
         checkExistBook(query);
     }
 
@@ -36,7 +37,7 @@ public class GenreEventListener extends AbstractMongoEventListener<Genre> {
                 && "genre".equals(event.getCollectionName())
                 && event.getDocument().isEmpty()) {
             List<Genre> genres = mongoOperations.findAll(Genre.class);
-            Query query = query(where("genres.id").in(genres.stream().map(Genre::getId).collect(toList())));
+            Query query = query(where("genres.$id").in(genres.stream().map(Genre::getId).map(ObjectId::new).collect(toList())));
             checkExistBook(query);
         }
         super.onApplicationEvent(event);

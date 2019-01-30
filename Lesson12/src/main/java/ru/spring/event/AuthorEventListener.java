@@ -1,6 +1,7 @@
 package ru.spring.event;
 
 import com.mongodb.MongoException;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeDeleteEvent;
@@ -26,7 +27,7 @@ public class AuthorEventListener extends AbstractMongoEventListener<Author> {
 
     @Override
     public void onBeforeDelete(BeforeDeleteEvent<Author> event) {
-        Query query = query(where("authors.id").is(event.getSource().getObjectId("_id").toHexString()));
+        Query query = query(where("authors.$id").is(event.getSource().getObjectId("_id")));
         checkExistBook(query);
     }
 
@@ -36,7 +37,7 @@ public class AuthorEventListener extends AbstractMongoEventListener<Author> {
                 && "author".equals(event.getCollectionName())
                 && event.getDocument().isEmpty()) {
             List<Author> authors = mongoOperations.findAll(Author.class);
-            Query query = query(where("authors.id").in(authors.stream().map(Author::getId).collect(toList())));
+            Query query = query(where("authors.$id").in(authors.stream().map(Author::getId).map(ObjectId::new).collect(toList())));
             checkExistBook(query);
         }
         super.onApplicationEvent(event);

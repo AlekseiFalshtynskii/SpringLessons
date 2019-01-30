@@ -44,6 +44,12 @@ public class CommentRepositoryTest {
     @Before
     public void init() {
         mongoTemplate.getDb().drop();
+        mongoTemplate.insert(author1);
+        mongoTemplate.insert(author2);
+        mongoTemplate.insert(author3);
+        mongoTemplate.insert(genre1);
+        mongoTemplate.insert(book1);
+        mongoTemplate.insert(book2);
         mongoTemplate.insert(comment1);
         mongoTemplate.insert(comment2);
         mongoTemplate.insert(comment3);
