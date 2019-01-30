@@ -7,13 +7,17 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Document
+import static ru.spring.model.Book.BOOK_COLLECTION_NAME;
+
+@Document(collection = BOOK_COLLECTION_NAME)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
 public class Book {
+    public static final String BOOK_COLLECTION_NAME = "book";
+
     @Id
     private String id;
     private String name;

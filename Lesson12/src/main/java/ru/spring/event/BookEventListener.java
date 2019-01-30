@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
+import static ru.spring.model.Book.BOOK_COLLECTION_NAME;
 
 @Component
 public class BookEventListener extends AbstractMongoEventListener<Book> {
@@ -46,7 +47,7 @@ public class BookEventListener extends AbstractMongoEventListener<Book> {
     @Override
     public void onApplicationEvent(MongoMappingEvent<?> event) {
         if (event instanceof BeforeDeleteEvent
-                && "book".equals(event.getCollectionName())
+                && BOOK_COLLECTION_NAME.equals(event.getCollectionName())
                 && event.getDocument().isEmpty()) {
             mongoOperations.remove(Comment.class);
         }

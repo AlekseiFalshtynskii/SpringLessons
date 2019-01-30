@@ -16,6 +16,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
+import static ru.spring.model.Genre.GENRE_COLLECTION_NAME;
 
 @Component
 public class GenreEventListener extends AbstractMongoEventListener<Genre> {
@@ -34,7 +35,7 @@ public class GenreEventListener extends AbstractMongoEventListener<Genre> {
     @Override
     public void onApplicationEvent(MongoMappingEvent<?> event) {
         if (event instanceof BeforeDeleteEvent
-                && "genre".equals(event.getCollectionName())
+                && GENRE_COLLECTION_NAME.equals(event.getCollectionName())
                 && event.getDocument().isEmpty()) {
             List<Genre> genres = mongoOperations.findAll(Genre.class);
             Query query = query(where("genres.$id").in(genres.stream().map(Genre::getId).map(ObjectId::new).collect(toList())));

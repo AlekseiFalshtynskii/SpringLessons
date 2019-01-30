@@ -16,6 +16,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
+import static ru.spring.model.Author.AUTHOR_COLLECTION_NAME;
 
 @Component
 public class AuthorEventListener extends AbstractMongoEventListener<Author> {
@@ -34,7 +35,7 @@ public class AuthorEventListener extends AbstractMongoEventListener<Author> {
     @Override
     public void onApplicationEvent(MongoMappingEvent<?> event) {
         if (event instanceof BeforeDeleteEvent
-                && "author".equals(event.getCollectionName())
+                && AUTHOR_COLLECTION_NAME.equals(event.getCollectionName())
                 && event.getDocument().isEmpty()) {
             List<Author> authors = mongoOperations.findAll(Author.class);
             Query query = query(where("authors.$id").in(authors.stream().map(Author::getId).map(ObjectId::new).collect(toList())));
