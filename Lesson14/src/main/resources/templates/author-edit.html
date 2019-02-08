@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head(title=#{title.title})"></head>
+<body>
+    <div th:replace="fragments/header :: header">&nbsp;</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <form th:action="@{/authors}"
+                      th:object="${author}"
+                      method="POST">
+                    <input type="text"
+                           hidden
+                           readonly
+                           th:field="${author.id}"/>
+                    <div class="form-group">
+                        <label for="firstName"
+                               th:text="#{authors.firstName}"
+                               th:classappend="${#fields.hasErrors('firstName')} ? 'text-danger'">
+                            Имя
+                        </label>
+                        <input type="text"
+                               id="firstName"
+                               class="form-control"
+                               placeholder="Имя"
+                               th:placeholder="#{authors.firstName}"
+                               th:readonly="${readonly}"
+                               th:field="${author.firstName}"
+                               th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid'">
+                        <span class="text-danger"
+                              th:if="${#fields.hasErrors('firstName')}"
+                              th:errors="${author.firstName}">
+                            Некорректное имя
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName"
+                               th:text="#{authors.lastName}"
+                               th:classappend="${#fields.hasErrors('lastName')} ? 'text-danger'">
+                            Фамилия
+                        </label>
+                        <input type="text"
+                               id="lastName"
+                               class="form-control"
+                               placeholder="Фамилия"
+                               th:placeholder="#{authors.lastName}"
+                               th:readonly="${readonly}"
+                               th:field="${author.lastName}"
+                               th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid'">
+                        <span class="text-danger"
+                              th:if="${#fields.hasErrors('lastName')}"
+                              th:errors="${author.lastName}">
+                            Некорректная фамилия
+                        </span>
+                    </div>
+                    <a href="#"
+                       th:href="@{/authors/{id}/edit(id=${author.id})}">
+                        <button type="button"
+                                class="btn btn-dark"
+                                th:if="${readonly}"
+                                th:text="#{action.edit}">
+                            Редактировать
+                        </button>
+                    </a>
+                    <button type="submit"
+                            class="btn btn-dark"
+                            th:unless="${readonly}"
+                            th:text="#{action.save}">
+                        Сохранить
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

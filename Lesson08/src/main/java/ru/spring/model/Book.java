@@ -14,7 +14,7 @@ public class Book {
     private String name;
     private String description;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @LazyCollection(LazyCollectionOption.FALSE)
     @JoinTable(
             name = "book_author",
