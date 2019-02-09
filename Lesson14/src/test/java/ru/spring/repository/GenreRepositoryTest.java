@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.spring.model.Genre;
 
@@ -61,6 +62,7 @@ public class GenreRepositoryTest {
     }
 
     @Test
+    @Sql("/delete-books.sql")
     public void deleteByIdTest() {
         List<Genre> expected = emptyList();
         dao.deleteById(1L);
@@ -69,6 +71,7 @@ public class GenreRepositoryTest {
     }
 
     @Test
+    @Sql("/delete-books.sql")
     public void deleteAllTest() {
         List<Genre> expected = emptyList();
         dao.deleteAll();

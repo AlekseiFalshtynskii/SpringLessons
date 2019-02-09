@@ -5,6 +5,8 @@ spring:
     username: sa
     password: sa
     initialization-mode: always
+    schema: schema-test.sql
+    data: data-test.sql
   jpa:
     hibernate:
       ddl-auto: none

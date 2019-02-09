@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.spring.model.Author;
 
@@ -63,7 +64,8 @@ public class AuthorRepositoryTest {
     }
 
     @Test
-    public void deleteByIdTest() {
+    @Sql("/delete-books.sql")
+    public void deleteByIdWithoutBooksTest() {
         List<Author> expected = asList(author1, author2);
         repository.deleteById(3L);
         List<Author> actual = (List<Author>) repository.findAll();
@@ -71,6 +73,7 @@ public class AuthorRepositoryTest {
     }
 
     @Test
+    @Sql("/delete-books.sql")
     public void deleteAllTest() {
         List<Author> expected = emptyList();
         repository.deleteAll();
