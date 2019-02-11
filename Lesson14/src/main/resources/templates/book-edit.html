@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head(title=#{title.title})"></head>
+<body>
+    <div th:replace="fragments/header :: header">&nbsp;</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <form th:action="@{/books}"
+                      th:object="${book}"
+                      method="POST">
+                    <input type="text"
+                           hidden
+                           readonly
+                           th:field="${book.id}"/>
+                    <div class="form-group">
+                        <label for="name"
+                               th:text="#{books.name}"
+                               th:classappend="${#fields.hasErrors('name')} ? 'text-danger'">
+                            Название
+                        </label>
+                        <input type="text"
+                               id="name"
+                               class="form-control"
+                               placeholder="Название"
+                               th:placeholder="#{books.name}"
+                               th:readonly="${readonly}"
+                               th:field="${book.name}"
+                               th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'">
+                        <span class="text-danger"
+                              th:if="${#fields.hasErrors('name')}"
+                              th:errors="${book.name}">
+                            Некорректное название
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label for="description"
+                               th:text="#{books.description}"
+                               th:classappend="${#fields.hasErrors('description')} ? 'text-danger'">
+                            Описание
+                        </label>
+                        <input type="text"
+                               id="description"
+                               class="form-control"
+                               placeholder="Описание"
+                               th:placeholder="#{books.description}"
+                               th:readonly="${readonly}"
+                               th:field="${book.description}"
+                               th:classappend="${#fields.hasErrors('description')} ? 'is-invalid'">
+                        <span class="text-danger"
+                              th:if="${#fields.hasErrors('description')}"
+                              th:errors="${book.description}">
+                            Некорректное описание
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label for="authors"
+                               th:text="#{books.authors}"
+                               th:classappend="${#fields.hasErrors('authors')} ? 'text-danger'">
+                            Авторы
+                        </label>
+                        <div class="row">
+                            <select id="authors"
+                                    class="selectpicker form-control"
+                                    multiple
+                                    th:disabled="${readonly}"
+                                    th:field="${book.authors}">
+                                <option th:each="author : ${authors}"
+                                        th:value="${author.id}"
+                                        th:text="${author.firstName + ' ' + author.lastName}">
+                                    Автор
+                                </option>
+                            </select>
+                        </div>
+                        <span class="text-danger"
+                              th:if="${#fields.hasErrors('authors')}"
+                              th:errors="${book.authors}">
+                            Некорректный список авторов
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        <label for="genres"
+                               th:text="#{books.genres}"
+                               th:classappend="${#fields.hasErrors('genres')} ? 'text-danger'">
+                            Авторы
+                        </label>
+                        <div class="row">
+                            <select id="genres"
+                                    class="selectpicker form-control"
+                                    multiple
+                                    th:disabled="${readonly}"
+                                    th:field="${book.genres}">
+                                <option th:each="genre : ${genres}"
+                                        th:selected="${book.genres.contains(genre)}"
+                                        th:value="${genre.id}"
+                                        th:text="${genre.name}">
+                                    Жанр
+                                </option>
+                            </select>
+                        </div>
+                        <span class="text-danger"
+                              th:if="${#fields.hasErrors('genres')}"
+                              th:errors="${book.genres}">
+                            Некорректный список жанров
+                        </span>
+                    </div>
+                    <a href="#"
+                       th:href="@{/books/{id}/edit(id=${book.id})}">
+                        <button type="button"
+                                class="btn btn-dark"
+                                th:if="${readonly}"
+                                th:text="#{action.edit}">
+                            Редактировать
+                        </button>
+                    </a>
+                    <button type="submit"
+                            class="btn btn-dark"
+                            th:unless="${readonly}"
+                            th:text="#{action.save}">
+                        Сохранить
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
