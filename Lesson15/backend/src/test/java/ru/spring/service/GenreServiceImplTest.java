@@ -32,8 +32,8 @@ public class GenreServiceImplTest {
         Genre genre1 = genreOf("");
         Genre genre2 = genreOf(1L, "");
         when(repositoryMock.save(genre1)).thenReturn(genre2);
-        genre1 = genreService.save(genre1);
-        assertEquals(1, genre1.getId().intValue());
+        Genre genre3 = genreService.save(genre1);
+        assertEquals(1, genre3.getId().intValue());
         verify(repositoryMock, times(1)).save(genre1);
     }
 

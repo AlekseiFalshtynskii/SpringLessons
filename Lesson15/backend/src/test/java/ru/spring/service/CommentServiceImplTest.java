@@ -33,8 +33,8 @@ public class CommentServiceImplTest {
         Comment comment1 = commentOf("", bookOf(1L, "", "", null, null));
         Comment comment2 = commentOf(1L, "", bookOf(1L, "", "", null, null));
         when(repositoryMock.save(comment1)).thenReturn(comment2);
-        comment1 = commentService.save(comment1);
-        assertEquals(1, comment1.getId().intValue());
+        Comment comment3 = commentService.save(comment1);
+        assertEquals(1, comment3.getId().intValue());
         verify(repositoryMock, times(1)).save(comment1);
     }
 

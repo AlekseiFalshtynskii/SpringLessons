@@ -32,8 +32,8 @@ public class AuthorServiceImplTest {
         Author author1 = authorOf("", "");
         Author author2 = authorOf(1L, "", "");
         when(repositoryMock.save(author1)).thenReturn(author2);
-        author1 = authorService.save(author1);
-        assertEquals(1, author1.getId().intValue());
+        Author author3 = authorService.save(author1);
+        assertEquals(1, author3.getId().intValue());
         verify(repositoryMock, times(1)).save(author1);
     }
 

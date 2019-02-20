@@ -32,8 +32,8 @@ public class BookServiceImplTest {
         Book book1 = bookOf("", "", emptyList(), emptyList());
         Book book2 = bookOf(1L, "", "", emptyList(), emptyList());
         when(repositoryMock.save(book1)).thenReturn(book2);
-        book1 = bookService.save(book1);
-        assertEquals(1, book1.getId().intValue());
+        Book book3 = bookService.save(book1);
+        assertEquals(1, book3.getId().intValue());
         verify(repositoryMock, times(1)).save(book1);
     }
 
