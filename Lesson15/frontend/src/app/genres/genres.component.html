@@ -1,0 +1,44 @@
+<div class="button-row">
+  <button mat-raised-button
+          color="primary"
+          routerLink="add">
+    Добавить
+  </button>
+  <button mat-raised-button
+          color="primary"
+          [disabled]="!genres"
+          (click)="deleteAll()">
+    Удалить все
+  </button>
+</div>
+
+<table mat-table [dataSource]="genres" class="mat-elevation-z8">
+
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef> id </th>
+    <td mat-cell *matCellDef="let genre">
+      <a href="#" routerLink="edit/{{genre.id}}"> {{genre.id}} </a>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Наименование </th>
+    <td mat-cell *matCellDef="let genre">
+      <a href="#" routerLink="edit/{{genre.id}}"> {{genre.name}} </a>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef> Действие </th>
+    <td mat-cell *matCellDef="let genre">
+      <button mat-raised-button
+              color="primary"
+              (click)="deleteById(genre.id)">
+        Удалить
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

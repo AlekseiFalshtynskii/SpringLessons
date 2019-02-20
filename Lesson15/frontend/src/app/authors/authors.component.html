@@ -1,0 +1,51 @@
+<div class="button-row">
+  <button mat-raised-button
+          color="primary"
+          routerLink="add">
+    Добавить
+  </button>
+  <button mat-raised-button
+          color="primary"
+          [disabled]="!authors"
+          (click)="deleteAll()">
+    Удалить все
+  </button>
+</div>
+
+<table mat-table [dataSource]="authors" class="mat-elevation-z8">
+
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef> id </th>
+    <td mat-cell *matCellDef="let author">
+      <a href="#" routerLink="edit/{{author.id}}"> {{author.id}} </a>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="firstName">
+    <th mat-header-cell *matHeaderCellDef> Имя </th>
+    <td mat-cell *matCellDef="let author">
+      <a href="#" routerLink="edit/{{author.id}}"> {{author.firstName}} </a>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="lastName">
+    <th mat-header-cell *matHeaderCellDef> Фамилия </th>
+    <td mat-cell *matCellDef="let author">
+      <a href="#" routerLink="edit/{{author.id}}"> {{author.lastName}} </a>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef> Действие </th>
+    <td mat-cell *matCellDef="let author">
+      <button mat-raised-button
+              color="primary"
+              (click)="deleteById(author.id)">
+        Удалить
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
