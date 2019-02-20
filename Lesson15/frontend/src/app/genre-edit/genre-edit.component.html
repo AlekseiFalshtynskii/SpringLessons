@@ -1,0 +1,36 @@
+<form *ngIf="genreForm" [formGroup]="genreForm">
+  <div class="field-container">
+    <mat-form-field>
+      <input matInput
+             placeholder="Наименование"
+             formControlName="name"
+             readonly="{{readonly}}"
+             required>
+      <mat-error *ngIf="!genreForm.valueOf().name">
+        Вы должны заполнить поле
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="button-row">
+    <button *ngIf="readonly"
+            mat-raised-button
+            color="primary"
+            (click)="edit()">
+      Редактировать
+    </button>
+    <button *ngIf="!readonly"
+            mat-raised-button
+            color="primary"
+            [disabled]="!genreForm.valid"
+            (click)="save()">
+      Сохранить
+    </button>
+    <button mat-raised-button
+            color="primary"
+            (click)="cancel()">
+      Отменить
+    </button>
+  </div>
+</form>
+

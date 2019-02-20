@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:h2;mode=PostgreSQL
+    username: sa
+    password: sa
+    initialization-mode: always
+  jpa:
+    hibernate:
+      ddl-auto: none
