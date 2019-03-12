@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head(title=#{title.title})"></head>
+<body>
+    <div th:replace="fragments/header :: header">&nbsp;</div>
+    <div class="container">
+
+        <div class="row mt-3 mb-3">
+            <a href="#"
+               th:href="@{/genres/add}">
+                <button type="button"
+                        class="btn btn-dark mr-3 ml-3"
+                        th:text="#{action.add}">
+                    Добавить
+                </button>
+            </a>
+            <form th:action="@{/genres}" th:method="DELETE">
+                <button type="submit"
+                        class="btn btn-dark"
+                        th:text="#{action.delete.all}">
+                    Удалить все
+                </button>
+            </form>
+        </div>
+
+        <div th:if="${genres.empty}"
+             th:text="#{genres.missing}"
+             class="alert alert-dark fade show">
+            Жанров нет
+        </div>
+
+        <table class="table table-striped table-dark table-hover"
+               th:unless="${genres.empty}">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th th:text="#{genres.name}">Наименование</th>
+                <th th:text="#{action.action}">Действие</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="genre : ${genres}">
+                <th scape="row">
+                    <a href="#"
+                       class="text-light"
+                       th:text="${genre.id}"
+                       th:href="@{/genres/{id}/view(id=${genre.id})}">
+                        Айди
+                    </a>
+                </th>
+                <td>
+                    <a href="#"
+                       class="text-light"
+                       th:text="${genre.name}"
+                       th:href="@{/genres/{id}/view(id=${genre.id})}">
+                        Наименование
+                    </a>
+                </td>
+                <td>
+                    <form th:action="@{/genres/{id}(id=${genre.id})}" th:method="DELETE">
+                        <button type="submit"
+                                class="btn btn-dark"
+                                th:text="#{action.delete}">
+                            Удалить
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

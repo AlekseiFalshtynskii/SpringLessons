@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head(title=#{title.title})"></head>
+<body>
+    <div th:replace="fragments/header :: header">&nbsp;</div>
+    <div class="container">
+
+        <div class="row mt-3 mb-3">
+            <a href="#"
+               th:href="@{/authors/add}">
+                <button type="button"
+                        class="btn btn-dark mr-3 ml-3"
+                        th:text="#{action.add}">
+                    Добавить
+                </button>
+            </a>
+            <form th:action="@{/authors}" th:method="DELETE">
+                <button type="submit"
+                        class="btn btn-dark"
+                        th:text="#{action.delete.all}">
+                    Удалить все
+                </button>
+            </form>
+        </div>
+
+        <div th:if="${authors.empty}"
+             th:text="#{authors.missing}"
+             class="alert alert-dark fade show">
+            Авторов нет
+        </div>
+
+        <table class="table table-striped table-dark table-hover"
+               th:unless="${authors.empty}">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th th:text="#{authors.firstName}">Имя</th>
+                <th th:text="#{authors.lastName}">Фамилия</th>
+                <th th:text="#{action.action}">Действие</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="author : ${authors}">
+                <th scape="row">
+                    <a href="#"
+                       class="text-light"
+                       th:text="${author.id}"
+                       th:href="@{/authors/{id}/view(id=${author.id})}">
+                        Айди
+                    </a>
+                </th>
+                <td>
+                    <a href="#"
+                       class="text-light"
+                       th:text="${author.firstName}"
+                       th:href="@{/authors/{id}/view(id=${author.id})}">
+                        Имя
+                    </a>
+                </td>
+                <td>
+                    <a href="#"
+                       class="text-light"
+                       th:text="${author.lastName}"
+                       th:href="@{/authors/{id}/view(id=${author.id})}">
+                        Фамилия
+                    </a>
+                </td>
+                <td>
+                    <form th:action="@{/authors/{id}(id=${author.id})}" th:method="DELETE">
+                        <button type="submit"
+                                class="btn btn-dark"
+                                th:text="#{action.delete}">
+                            Удалить
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
