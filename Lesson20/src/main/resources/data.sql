@@ -17,3 +17,5 @@ INSERT INTO book_author (book_id, author_id) VALUES (2, 3);
 
 INSERT INTO book_genre (book_id, genre_id) VALUES (1, 1);
 INSERT INTO book_genre (book_id, genre_id) VALUES (2, 1);
+
+INSERT INTO users (id, username, password, enabled) VALUES (1, 'admin', 'admin', TRUE);
