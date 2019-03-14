@@ -32,3 +32,10 @@ CREATE TABLE IF NOT EXISTS book_genre (
   genre_id INTEGER REFERENCES genre (id) ON UPDATE CASCADE,
   CONSTRAINT book_genre_id PRIMARY KEY (book_id, genre_id)
 );
+
+CREATE TABLE IF NOT EXISTS users (
+  id       SERIAL PRIMARY KEY,
+  username TEXT    NOT NULL,
+  password TEXT    NOT NULL,
+  enabled  BOOLEAN NOT NULL
+);
