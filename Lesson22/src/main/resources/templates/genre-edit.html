@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head(title=#{title.title})"></head>
+<body>
+    <div th:replace="fragments/header :: header">&nbsp;</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <form th:action="@{/genres}"
+                      th:object="${genre}"
+                      method="POST">
+                    <input type="text"
+                           hidden
+                           readonly
+                           th:field="${genre.id}"/>
+                    <div class="form-group">
+                        <label for="name"
+                               th:text="#{genres.name}"
+                               th:classappend="${#fields.hasErrors('name')} ? 'text-danger'">
+                            Наименование
+                        </label>
+                        <input type="text"
+                               id="name"
+                               class="form-control"
+                               placeholder="Наименование"
+                               th:placeholder="#{genres.name}"
+                               th:readonly="${readonly}"
+                               th:field="${genre.name}"
+                               th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'">
+                        <span class="text-danger"
+                              th:if="${#fields.hasErrors('name')}"
+                              th:errors="${genre.name}">
+                            Некорректное наименование
+                        </span>
+                    </div>
+                    <a href="#"
+                       th:href="@{/genres/{id}/edit(id=${genre.id})}">
+                        <button type="button"
+                                class="btn btn-dark"
+                                th:if="${readonly}"
+                                th:text="#{action.edit}">
+                            Редактировать
+                        </button>
+                    </a>
+                    <button type="submit"
+                            class="btn btn-dark"
+                            th:unless="${readonly}"
+                            th:text="#{action.save}">
+                        Сохранить
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

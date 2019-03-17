@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head(title=#{title.title})"></head>
+<body>
+    <div class="container mt-3">
+        <div th:if="${loginError}" class="alert alert-danger" role="alert">
+            Неправильный логин или пароль
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <form th:action="@{/login}"
+                      method="POST">
+                    <div class="form-group">
+                        <label for="username"
+                               th:text="#{login.login}">
+                            Логин
+                        </label>
+                        <input type="text"
+                               id="username"
+                               name="username"
+                               autofocus="autofocus"
+                               placeholder="Наименование"
+                               class="form-control"
+                               th:placeholder="#{login.login}">
+                    </div>
+                    <div class="form-group">
+                        <label for="password"
+                               th:text="#{login.password}">
+                            Пароль
+                        </label>
+                        <input type="text"
+                               id="password"
+                               name="password"
+                               placeholder="Пароль"
+                               class="form-control"
+                               th:placeholder="#{login.password}">
+                    </div>
+                    <button type="submit"
+                            class="btn btn-dark"
+                            th:text="#{login.enter}">
+                        Войти
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

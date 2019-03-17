@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark" th:fragment="header">
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a href="#"
+                   class="nav-link"
+                   th:classappend="${module == 'books' ? 'active' : ''}"
+                   th:text="#{navbar.books}"
+                   th:href="@{/}">
+                    Книги
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#"
+                   class="nav-link"
+                   th:classappend="${module == 'authors' ? 'active' : ''}"
+                   th:text="#{navbar.authors}"
+                   th:href="@{/authors}">
+                    Авторы
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#"
+                   class="nav-link"
+                   th:classappend="${module == 'genres' ? 'active' : ''}"
+                   th:text="#{navbar.genres}"
+                   th:href="@{/genres}">
+                    Жанры
+                </a>
+            </li>
+        </ul>
+        <div class="nav navbar-nav navbar-right">
+            <a href="#"
+               class="navbar-brand"
+               th:text="#{navbar.logout}"
+               th:href="@{/logout}">Выйти</a>
+        </div>
+    </div>
+</nav>
