@@ -22,7 +22,6 @@ import static ru.spring.model.Genre.genreOf;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(BookController.class)
-@WithMockUser(username = "admin")
 public class BookControllerTest {
 
     @MockBean
@@ -38,6 +37,7 @@ public class BookControllerTest {
     private MockMvc mockMvc;
 
     @Test
+    @WithMockUser(roles = "CREATOR")
     public void addTest() throws Exception {
         when(authorServiceMock.findAll()).thenReturn(singletonList(authorOf()));
         when(genreServiceMock.findAll()).thenReturn(singletonList(genreOf()));
@@ -50,6 +50,7 @@ public class BookControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = {"CREATOR", "EDITOR", "REMOVER"})
     public void viewTest() throws Exception {
         when(bookServiceMock.findById(1L)).thenReturn(bookOf());
         mockMvc.perform(get("/books/{id}/view", 1))
@@ -61,6 +62,7 @@ public class BookControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "EDITOR")
     public void editTest() throws Exception {
         when(bookServiceMock.findById(1L)).thenReturn(bookOf());
         mockMvc.perform(get("/books/{id}/edit", 1))
@@ -72,18 +74,21 @@ public class BookControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = {"CREATOR", "EDITOR"})
     public void saveTest() throws Exception {
         mockMvc.perform(post("/books", bookOf()))
                 .andExpect(status().isOk());
     }
 
     @Test
+    @WithMockUser(roles = "REMOVER")
     public void deleteByIdTest() throws Exception {
         mockMvc.perform(delete("/books/{id}", 1))
                 .andExpect(status().isFound());
     }
 
     @Test
+    @WithMockUser(roles = "REMOVER")
     public void deleteAllTest() throws Exception {
         mockMvc.perform(delete("/books"))
                 .andExpect(status().isFound());

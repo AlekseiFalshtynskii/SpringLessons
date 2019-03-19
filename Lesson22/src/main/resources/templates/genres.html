@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head th:replace="fragments/head :: head(title=#{title.title})"></head>
 <body>
@@ -8,6 +9,7 @@
 
         <div class="row mt-3 mb-3">
             <a href="#"
+               sec:authorize="hasAnyRole('ADMIN', 'CREATOR')"
                th:href="@{/genres/add}">
                 <button type="button"
                         class="btn btn-dark mr-3 ml-3"
@@ -15,7 +17,9 @@
                     Добавить
                 </button>
             </a>
-            <form th:action="@{/genres}" th:method="DELETE">
+            <form sec:authorize="hasAnyRole('ADMIN', 'REMOVER')"
+                  th:action="@{/genres}"
+                  th:method="DELETE">
                 <button type="submit"
                         class="btn btn-dark"
                         th:text="#{action.delete.all}">
@@ -58,7 +62,9 @@
                     </a>
                 </td>
                 <td>
-                    <form th:action="@{/genres/{id}(id=${genre.id})}" th:method="DELETE">
+                    <form sec:authorize="hasAnyRole('ADMIN', 'REMOVER')"
+                          th:action="@{/genres/{id}(id=${genre.id})}"
+                          th:method="DELETE">
                         <button type="submit"
                                 class="btn btn-dark"
                                 th:text="#{action.delete}">

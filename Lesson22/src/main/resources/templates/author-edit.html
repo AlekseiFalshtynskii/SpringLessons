@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head th:replace="fragments/head :: head(title=#{title.title})"></head>
 <body>
@@ -55,6 +56,7 @@
                         </span>
                     </div>
                     <a href="#"
+                       sec:authorize="hasAnyRole('ADMIN', 'EDITOR')"
                        th:href="@{/authors/{id}/edit(id=${author.id})}">
                         <button type="button"
                                 class="btn btn-dark"
@@ -63,11 +65,17 @@
                             Редактировать
                         </button>
                     </a>
-                    <button type="submit"
+                    <button sec:authorize="hasAnyRole('ADMIN', 'CREATOR', 'EDITOR')"
+                            type="submit"
                             class="btn btn-dark"
                             th:unless="${readonly}"
                             th:text="#{action.save}">
                         Сохранить
+                    </button>
+                    <button onclick="history.back()"
+                            type="button"
+                            class="btn btn-dark">
+                        Отменить
                     </button>
                 </form>
             </div>
