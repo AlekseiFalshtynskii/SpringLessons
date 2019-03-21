@@ -1,5 +1,6 @@
 package ru.spring.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -29,6 +30,7 @@ public class BookController {
     }
 
     @GetMapping("/books/add")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CREATOR')")
     public String add(Model model) {
         model.addAttribute("book", bookOf());
         model.addAttribute("authors", authorService.findAll());
@@ -49,6 +51,7 @@ public class BookController {
     }
 
     @GetMapping("/books/{id}/edit")
+    @PreAuthorize("hasAnyRole('ADMIN', 'EDITOR')")
     public String edit(@PathVariable Long id, Model model) {
         model.addAttribute("book", bookService.findById(id));
         model.addAttribute("authors", authorService.findAll());
@@ -59,6 +62,7 @@ public class BookController {
     }
 
     @PostMapping("/books")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CREATOR', 'EDITOR')")
     public String save(@Valid @ModelAttribute Book book, Errors errors, Model model) {
         if (errors.hasErrors()) {
             model.addAttribute("authors", authorService.findAll());
@@ -71,12 +75,14 @@ public class BookController {
     }
 
     @DeleteMapping("/books/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'REMOVER')")
     public String deleteById(@PathVariable Long id) {
         bookService.deleteById(id);
         return "redirect:/";
     }
 
     @DeleteMapping("/books")
+    @PreAuthorize("hasAnyRole('ADMIN', 'REMOVER')")
     public String deleteAll() {
         bookService.deleteAll();
         return "redirect:/";

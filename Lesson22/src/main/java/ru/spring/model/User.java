@@ -1,8 +1,12 @@
 package ru.spring.model;
 
 import lombok.*;
+import org.hibernate.annotations.LazyCollection;
 
 import javax.persistence.*;
+import java.util.List;
+
+import static org.hibernate.annotations.LazyCollectionOption.FALSE;
 
 @Entity
 @Data
@@ -25,4 +29,9 @@ public class User {
 
     @Column(name = "enabled", nullable = false)
     private Boolean enabled;
+
+    @ElementCollection
+    @CollectionTable(name = "authorities")
+    @LazyCollection(FALSE)
+    private List<String> authorities;
 }
