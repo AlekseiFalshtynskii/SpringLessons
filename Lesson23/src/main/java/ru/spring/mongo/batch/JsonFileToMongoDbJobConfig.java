@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.mongodb.core.MongoOperations;
-import ru.spring.batch.MigrationPathDeletingTasklet;
 import ru.spring.mongo.domain.Author;
 import ru.spring.mongo.domain.Book;
 import ru.spring.mongo.domain.Genre;
@@ -36,9 +35,6 @@ public class JsonFileToMongoDbJobConfig {
 
     @Value("${chunk.size}")
     int chunkSize;
-
-    @Value("${file.path.path}")
-    String path;
 
     @Bean
     ItemReader<Book> bookFileItemReader() {
@@ -129,13 +125,6 @@ public class JsonFileToMongoDbJobConfig {
         return new MongoItemWriterBuilder<Genre>()
                 .template(mongoOperations)
                 .collection("genre")
-                .build();
-    }
-
-    @Bean
-    public Step deleteMigrationPathStep(StepBuilderFactory stepBuilderFactory) {
-        return stepBuilderFactory.get("deleteMigrationPathStep")
-                .tasklet(new MigrationPathDeletingTasklet(new FileSystemResource(path)))
                 .build();
     }
 
