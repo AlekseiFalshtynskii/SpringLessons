@@ -7,7 +7,7 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @ToString
-public class Topic {
+public class RequestPublish {
 
     private String text;
 }

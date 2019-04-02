@@ -1,18 +1,17 @@
 package ru.spring.service;
 
 import lombok.AllArgsConstructor;
-import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.SubscribableChannel;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
+import ru.spring.Instagram;
+import ru.spring.domain.RequestPublish;
 import ru.spring.domain.Topic;
 
-import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
+import static java.util.stream.Collectors.joining;
 import static org.apache.commons.lang3.RandomUtils.nextBytes;
 import static org.apache.commons.lang3.RandomUtils.nextInt;
 
@@ -20,71 +19,41 @@ import static org.apache.commons.lang3.RandomUtils.nextInt;
 @AllArgsConstructor
 public class InstagramService {
 
+    private final Instagram instagram;
+
     private final SubscribableChannel topicChannel;
 
-    private final List<MessageHandler> subscribers;
+    public void start() throws InterruptedException {
+        topicChannel.subscribe(message -> System.out.println("Темы опубликованы " + message.getPayload()));
 
-    public void start() {
-        ExecutorService executorService = Executors.newFixedThreadPool(3);
-        executorService.submit(subscribeRunnable());
-        executorService.submit(unSubscribeRunnable());
-        executorService.submit(sendTopic());
+        while (true) {
+            Thread.sleep(1000);
+
+            Collection<RequestPublish> items = generateRequestsPublish();
+
+            System.out.println("Новые запросы на публикацию: " +
+                    items.stream()
+                            .map(RequestPublish::getText)
+                            .collect(joining(",")));
+
+            Collection<Topic> food = instagram.process(items);
+
+            System.out.println("Темы смодерированы: " +
+                    food.stream()
+                            .map(Topic::getText)
+                            .collect(joining(",")));
+        }
     }
 
-    Runnable subscribeRunnable() {
-        return () -> {
-            while (true) {
-                int n = nextInt(10, 21);
-                for (int i = 0; i < n; i++) {
-                    final int q = i;
-                    MessageHandler subscriber = message -> System.out.println("Подписчик " + (subscribers.size() + q) + " прочитал тему " + message.getPayload());
-                    subscribers.add(subscriber);
-                    topicChannel.subscribe(subscriber);
-                }
-                System.out.println("Подписалось " + n + " новых подписчиков");
-                try {
-                    TimeUnit.MILLISECONDS.sleep(nextInt(1000, 3001));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
+    private Collection<RequestPublish> generateRequestsPublish() {
+        List<RequestPublish> items = new ArrayList<>();
+        for (int i = 0; i < nextInt(1, 5); ++i) {
+            items.add(generateRequestPublish());
+        }
+        return items;
     }
 
-    Runnable unSubscribeRunnable() {
-        return () -> {
-            while (true) {
-                if (subscribers.size() > 1) {
-                    int n = nextInt(1, 11);
-                    for (int i = 0; i < n; i++) {
-                        int id = nextInt(1, subscribers.size());
-                        topicChannel.unsubscribe(subscribers.get(id));
-                        subscribers.remove(id);
-                    }
-                    System.out.println("Отписалось " + n + " подписчиков");
-                }
-                try {
-                    TimeUnit.MILLISECONDS.sleep(nextInt(3000, 5001));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-    }
-
-    Runnable sendTopic() {
-        return () -> {
-            long id = 1;
-            while (true) {
-                try {
-                    Topic topic = new Topic(id++, new String(nextBytes(10), "UTF-8"));
-                    System.out.println("Опубликована тема " + topic);
-                    topicChannel.send(MessageBuilder.withPayload(topic).build());
-                    TimeUnit.MILLISECONDS.sleep(nextInt(3000, 6001));
-                } catch (UnsupportedEncodingException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
+    private RequestPublish generateRequestPublish() {
+        return new RequestPublish(new String(nextBytes(10)));
     }
 }
