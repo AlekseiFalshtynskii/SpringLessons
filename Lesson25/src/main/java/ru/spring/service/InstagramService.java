@@ -36,10 +36,10 @@ public class InstagramService {
                             .map(RequestPublish::getText)
                             .collect(joining(",")));
 
-            Collection<Topic> food = instagram.process(items);
+            Collection<Topic> topics = instagram.process(items);
 
             System.out.println("Темы смодерированы: " +
-                    food.stream()
+                    topics.stream()
                             .map(Topic::getText)
                             .collect(joining(",")));
         }
