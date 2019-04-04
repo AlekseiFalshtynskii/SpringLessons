@@ -4,16 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @ToString
-public class RequestPublish {
+public class ModerationResult {
 
-    private Long id;
+    private boolean allowed;
 
-    private List<String> tags;
-
-    private String text;
+    private RequestPublish rp;
 }

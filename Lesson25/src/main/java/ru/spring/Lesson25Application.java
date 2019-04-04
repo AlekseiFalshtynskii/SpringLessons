@@ -1,17 +1,17 @@
 package ru.spring;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.integration.config.EnableIntegration;
-import ru.spring.service.InstagramService;
+import ru.spring.service.PikabuService;
 
 @SpringBootApplication
 @EnableIntegration
 public class Lesson25Application {
 
     public static void main(String[] args) throws Exception {
-        AbstractApplicationContext ctx = new AnnotationConfigApplicationContext(Lesson25Application.class);
-        ctx.getBean(InstagramService.class).start();
+        ConfigurableApplicationContext ctx = SpringApplication.run(Lesson25Application.class, args);
+        ctx.getBean(PikabuService.class).start();
     }
 }
