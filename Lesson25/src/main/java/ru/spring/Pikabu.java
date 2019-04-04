@@ -9,5 +9,5 @@ import ru.spring.domain.RequestPublish;
 public interface Pikabu {
 
     @Gateway(requestChannel = "publishing.input")
-    void process(RequestPublish requestPublish);
+    void publish(RequestPublish requestPublish);
 }

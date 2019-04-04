@@ -38,7 +38,7 @@ public class PikabuService {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                pikabu.process(generateRequestPublish());
+                pikabu.publish(generateRequestPublish());
             }
         };
     }
