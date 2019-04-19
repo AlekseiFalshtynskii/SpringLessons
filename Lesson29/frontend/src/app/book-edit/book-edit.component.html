@@ -1,0 +1,80 @@
+<form *ngIf="bookForm" [formGroup]="bookForm">
+  <div class="field-container">
+    <mat-form-field>
+      <input matInput
+             placeholder="Название"
+             formControlName="name"
+             readonly="{{readonly}}"
+             required>
+      <mat-error *ngIf="bookForm.controls['name'].hasError('required')">
+        Вы должны заполнить поле
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="field-container">
+    <mat-form-field>
+      <input matInput
+             placeholder="Описание"
+             formControlName="description"
+             readonly="{{readonly}}">
+    </mat-form-field>
+  </div>
+  <div class="field-container">
+    <mat-form-field>
+      <mat-select placeholder="Авторы"
+                  formControlName="authors"
+                  [compareWith]="compare"
+                  [disabled]="readonly"
+                  required
+                  multiple>
+        <mat-option *ngFor="let author of authors"
+                    [value]="author">
+          {{ author.firstName + ' ' + author.lastName }}
+        </mat-option>
+        <mat-error *ngIf="bookForm.controls['authors'].hasError('required')">
+          Вы должны заполнить поле
+        </mat-error>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="field-container">
+    <mat-form-field>
+      <mat-select placeholder="Жанры"
+                  formControlName="genres"
+                  [compareWith]="compare"
+                  [disabled]="readonly"
+                  required
+                  multiple>
+        <mat-option *ngFor="let genre of genres"
+                    [value]="genre">
+          {{ genre.name }}
+        </mat-option>
+        <mat-error *ngIf="bookForm.controls['genres'].hasError('required')">
+          Вы должны заполнить поле
+        </mat-error>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="button-row">
+    <button *ngIf="readonly"
+            mat-raised-button
+            color="primary"
+            (click)="edit()">
+      Редактировать
+    </button>
+    <button *ngIf="!readonly"
+            mat-raised-button
+            color="primary"
+            [disabled]="bookForm.invalid"
+            (click)="save()">
+      Сохранить
+    </button>
+    <button mat-raised-button
+            color="primary"
+            (click)="cancel()">
+      Отменить
+    </button>
+  </div>
+</form>
+

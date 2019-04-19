@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+.button-row button,
+.button-row a {
+  margin: 8px;
+}
+
+table {
+  width: 100%;
+}
+
+.field-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.field-container > * {
+  width: 100%;
+}
+

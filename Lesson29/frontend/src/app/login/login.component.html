@@ -1,0 +1,33 @@
+<form *ngIf="loginForm" [formGroup]="loginForm">
+  <div class="field-container">
+    <mat-form-field>
+      <input matInput
+             placeholder="Логин"
+             formControlName="username"
+             required>
+      <!--<mat-error *ngIf="loginForm.controls['firstName'].hasError('required')">-->
+        <!--Вы должны заполнить поле-->
+      <!--</mat-error>-->
+    </mat-form-field>
+  </div>
+  <div class="field-container">
+    <mat-form-field>
+      <input matInput
+             placeholder="Пароль"
+             formControlName="password"
+             required>
+      <!--<mat-error *ngIf="loginForm.controls['lastName'].hasError('required')">-->
+        <!--Вы должны заполнить поле-->
+      <!--</mat-error>-->
+    </mat-form-field>
+  </div>
+
+  <div class="button-row">
+    <button mat-raised-button
+            color="primary"
+            (click)="login()">
+      Сохранить
+    </button>
+  </div>
+</form>
+
