@@ -7,7 +7,7 @@ COPY pom.xml .
 
 COPY src ./src
 
-RUN mvn package -DskipTests
+RUN mvn package -B -DskipTests
 
 #2
 FROM openjdk:8-jdk-alpine
