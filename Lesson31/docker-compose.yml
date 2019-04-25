@@ -1,0 +1,22 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=postgres
+    ports:
+      - 5432:5432
+  backend:
+    build: './backend'
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+  frontend:
+    build: './frontend'
+    ports:
+      - 4200:4200
+    depends_on:
+      - backend
