@@ -11,3 +11,11 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQL82Dialect
     hibernate:
       ddl-auto: update
+  main:
+    allow-bean-definition-overriding: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
