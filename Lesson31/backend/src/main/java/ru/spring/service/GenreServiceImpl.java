@@ -18,7 +18,7 @@ public class GenreServiceImpl implements GenreService {
         this.repository = repository;
     }
 
-    @HystrixCommand(groupKey = "GenreService", commandKey = "save", fallbackMethod = "fallbackSave")
+    @HystrixCommand(groupKey = "GenreService", commandKey = "save")
     @Override
     public Genre save(Genre genre) {
         return repository.save(genre);
@@ -58,10 +58,6 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public void deleteAll() {
         repository.deleteAll();
-    }
-
-    public Genre fallback() {
-        return genre();
     }
 
     public List<Genre> fallbackFindAll() {

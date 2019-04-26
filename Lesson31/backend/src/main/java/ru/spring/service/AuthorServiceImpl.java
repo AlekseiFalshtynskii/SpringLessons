@@ -19,7 +19,7 @@ public class AuthorServiceImpl implements AuthorService {
         this.repository = repository;
     }
 
-    @HystrixCommand(groupKey = "AuthorService", commandKey = "save", fallbackMethod = "fallbackSave")
+    @HystrixCommand(groupKey = "AuthorService", commandKey = "save")
     @Override
     public Author save(Author author) {
         return repository.save(author);
@@ -60,10 +60,6 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void deleteAll() {
         repository.deleteAll();
-    }
-
-    public Author fallbackSave() {
-        return author();
     }
 
     public List<Author> fallbackFindAll() {

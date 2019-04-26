@@ -20,7 +20,7 @@ public class BookServiceImpl implements BookService {
         this.repository = repository;
     }
 
-    @HystrixCommand(groupKey = "BookService", commandKey = "save", fallbackMethod = "fallbackSave")
+    @HystrixCommand(groupKey = "BookService", commandKey = "save")
     @Override
     public Book save(Book book) {
         return repository.save(book);
@@ -54,10 +54,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteAll() {
         repository.deleteAll();
-    }
-
-    public Book fallbackSave() {
-        return book();
     }
 
     public List<Book> fallbackFindAll() {
