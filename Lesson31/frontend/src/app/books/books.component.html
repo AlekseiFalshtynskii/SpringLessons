@@ -1,0 +1,73 @@
+<div class="button-row">
+  <button mat-raised-button
+          color="primary"
+          routerLink="/books/add">
+    Добавить
+  </button>
+  <button mat-raised-button
+          color="primary"
+          [disabled]="!books"
+          (click)="deleteAll()">
+    Удалить все
+  </button>
+</div>
+
+<table mat-table [dataSource]="books" class="mat-elevation-z8">
+
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef> id</th>
+    <td mat-cell *matCellDef="let book">
+      <a href="#" routerLink="/books/edit/{{book.id}}"> {{book.id}} </a>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Название</th>
+    <td mat-cell *matCellDef="let book">
+      <a href="#" routerLink="/books/edit/{{book.id}}"> {{book.name}} </a>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef> Описание</th>
+    <td mat-cell *matCellDef="let book">
+      <a href="#" routerLink="/books/edit/{{book.id}}"> {{book.description}} </a>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="authors">
+    <th mat-header-cell *matHeaderCellDef> Авторы</th>
+    <td mat-cell *matCellDef="let book">
+      <a href="#"
+         *ngFor="let author of book.authors"
+         routerLink="/authors/edit/{{author.id}}">
+        {{author.firstName + ' ' + author.lastName}} <br>
+      </a>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="genres">
+    <th mat-header-cell *matHeaderCellDef> Жанры</th>
+    <td mat-cell *matCellDef="let book">
+      <a href="#"
+         *ngFor="let genre of book.genres"
+         routerLink="/genres/edit/{{genre.id}}">
+        {{genre.name}} <br>
+      </a>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef> Действие</th>
+    <td mat-cell *matCellDef="let book">
+      <button mat-raised-button
+              color="primary"
+              (click)="deleteById(book.id)">
+        Удалить
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
